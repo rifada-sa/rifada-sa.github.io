@@ -4,6 +4,7 @@
     --sadu: #9E2B25;
     --saffron: #E0A526;
     --date: #3B2418;
+    --card: white;
 }
 
 /*الصفحه كامله*/
@@ -38,6 +39,7 @@ nav a:hover {
 /*راس الصفحه و شريط السدو */
 header {
     padding-bottom: 20px;
+    position: relative;
 }
 
 header::after {
@@ -52,7 +54,7 @@ header::after {
 }
 /*البطاقات*/
 section {
-    background-color: white;
+    background-color: var(--card);
     border-right: 5px solid var(--saffron);
     border-radius: 12px;
     padding: 20px;
@@ -110,4 +112,25 @@ footer {
     padding: 2px 10px;
     border-radius: 20px;
     margin-left: 8px;
+}
+/* ليل مزدلفة */
+body.night{
+    --ihram:#121829;
+    --card: #1A2236;
+    --date: #F3EBDD;
+    --sadu: #E8735F;
+}
+/* زر الوضع الليلي */
+#theme-btn {
+    background-color: var(--sadu);
+    color: var(--ihram);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: "Tajawal", sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
