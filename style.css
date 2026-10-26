@@ -1,13 +1,15 @@
-/*الوان سفرة رفادة*/
+/* ألوان رِفادة الحجازية */
 :root {
-    --ihram: #F7F1E6;
-    --sadu: #9E2B25;
-    --saffron: #E0A526;
-    --date: #3B2418;
-    --card: white;
+    --ihram: #F7F1E6;     /* أبيض الإحرام: الخلفية */
+    --rawasheen: #1F5C5A; /* أخضر الرواشين: الأساسي */
+    --saffron: #E0A526;   /* زعفران: الشمس واللي مضى */
+    --date: #3B2418;      /* تمر: النص */
+    --stone: #E6D9C2;     /* حجر منقبي: الحدود */
+    --alert: #9E2B25;     /* أحمر: للتنبيه بس */
+    --card: #FFFCF6;
 }
 
-/*الصفحه كامله*/
+/* الصفحة كاملة */
 body {
     background-color: var(--ihram);
     color: var(--date);
@@ -18,25 +20,35 @@ body {
     padding: 20px;
 }
 
-/* العناوين*/
+/* العناوين */
 h1,
 h2 {
-    color: var(--sadu);
+    color: var(--rawasheen);
     font-family: "Reem Kufi", sans-serif;
 }
 
-/*روابط التنقل*/
+/* الشعار بخط الرقعة */
+header h1 {
+    font-family: "Aref Ruqaa", serif;
+    font-size: 40px;
+    margin: 0;
+}
+
+/* روابط التنقل */
 nav a {
-    color: var(--sadu);
+    color: var(--rawasheen);
     margin-left: 15px;
     text-decoration: none;
     font-weight: bold;
+    display: inline-block;
+    white-space: nowrap;
 }
 
 nav a:hover {
     color: var(--saffron);
 }
-/*راس الصفحه و شريط السدو */
+
+/* رأس الصفحة وصف الأقواس الحجازية */
 header {
     padding-bottom: 20px;
     position: relative;
@@ -45,28 +57,30 @@ header {
 header::after {
     content: "";
     display: block;
-    height: 8px;
+    height: 14px;
     margin-top: 20px;
-    background: repeating-linear-gradient(45deg,
-            var(--sadu) 0 10px,
-            var(--date) 10px 20px,
-            var(--saffron) 20px 30px);
+    background:
+        radial-gradient(circle at 50% 7px, var(--rawasheen) 6.5px, transparent 7px) 0 0 / 18px 14px,
+        linear-gradient(90deg, transparent 2.5px, var(--rawasheen) 2.5px 15.5px, transparent 15.5px) 0 7px / 18px 7px repeat-x;
 }
-/*البطاقات*/
+
+/* البطاقات */
 section {
     background-color: var(--card);
-    border-right: 5px solid var(--saffron);
-    border-radius: 12px;
+    border: 1.5px solid var(--stone);
+    border-radius: 16px;
     padding: 20px;
     margin: 25px 0;
 }
-/*الذيل*/
+
+/* الذيل */
 footer {
     text-align: center;
-    color: var(--sadu);
+    color: var(--rawasheen);
     margin-top: 40px;
 }
-/*المزايا جنب بعض (Flexbox)*/
+
+/* المزايا جنب بعض (Flexbox) */
 #features ul {
     display: flex;
     flex-wrap: wrap;
@@ -83,46 +97,50 @@ footer {
     border-radius: 10px;
     text-align: center;
 }
-/*الخط الزمني لصفحة اليوم*/
+
+/* مسبحة يومك (صفحة الحاج) */
 .timeline {
     list-style: none;
     padding: 0;
-    border-right: 3px solid var(--saffron);
+    border-right: 2px solid var(--stone);
 }
 
 .timeline li {
     position: relative;
-    padding: 10px 20px 10px 0;
+    padding: 10px 24px 10px 0;
 }
 
 .timeline li::before {
     content: "";
     position: absolute;
-    right: -9px;
+    right: -10px;
     top: 16px;
-    width: 14px;
-    height: 14px;
-    background-color: var(--sadu);
+    width: 18px;
+    height: 18px;
+    background-color: var(--rawasheen);
     border-radius: 50%;
 }
 
 .timeline strong {
-    background-color: var(--sadu);
-    color: white;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
     padding: 2px 10px;
     border-radius: 20px;
     margin-left: 8px;
 }
-/* ليل مزدلفة */
-body.night{
-    --ihram:#121829;
+
+/* ليل مزدلفة (مؤقت لين نصممه) */
+body.night {
+    --ihram: #121829;
     --card: #1A2236;
     --date: #F3EBDD;
-    --sadu: #E8735F;
+    --rawasheen: #7CC1B6;
+    --stone: #2A3350;
 }
+
 /* زر الوضع الليلي */
 #theme-btn {
-    background-color: var(--sadu);
+    background-color: var(--rawasheen);
     color: var(--ihram);
     border: none;
     padding: 8px 16px;
@@ -133,4 +151,153 @@ body.night{
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* ===== لوحة الحملة ===== */
+
+/* الهيدر الأخضر */
+.campaign-hero {
+    position: relative;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    border: none;
+    border-radius: 20px 20px 0 0;
+    padding: 32px 24px 44px;
+    margin-bottom: 0;
+}
+
+.campaign-hero h1 {
+    color: var(--ihram);
+    margin: 0 0 8px;
+}
+
+/* صف الأقواس تحت الهيدر */
+.campaign-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 14px;
+    background:
+        radial-gradient(circle at 50% 7px, var(--card) 6.5px, transparent 7px) 0 0 / 18px 14px,
+        linear-gradient(90deg, transparent 2.5px, var(--card) 2.5px 15.5px, transparent 15.5px) 0 7px / 18px 7px repeat-x;
+}
+
+/* النموذج */
+#campaign-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: var(--card);
+    padding: 24px;
+    border-radius: 0 0 20px 20px;
+}
+
+#campaign-form label {
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+#campaign-form input,
+#campaign-form select {
+    font: inherit;
+    height: 48px;
+    padding: 0 14px;
+    border: 1.5px solid var(--stone);
+    border-radius: 12px;
+    background-color: var(--card);
+    color: inherit;
+    box-sizing: border-box;
+}
+
+#campaign-form input:focus,
+#campaign-form select:focus {
+    outline: 2px solid var(--rawasheen);
+    outline-offset: 1px;
+}
+
+/* مسبحة اليوم */
+#events {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#events::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    right: 13px;
+    width: 2px;
+    background-color: var(--stone);
+}
+
+.event {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.event::before {
+    content: "";
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--rawasheen);
+    box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18);
+}
+
+.event input[type="time"] {
+    width: 96px;
+    padding: 0 8px;
+    font-weight: 700;
+    color: var(--rawasheen);
+}
+
+.event input[type="text"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.remove {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+/* الأزرار */
+#add-event {
+    height: 52px;
+    border: 1.5px dashed var(--rawasheen);
+    border-radius: 14px;
+    background: none;
+    color: var(--rawasheen);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#campaign-form button[type="submit"] {
+    margin-top: 16px;
+    height: 56px;
+    border: none;
+    border-radius: 16px;
+    background-color: var(--date);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 19px;
+    cursor: pointer;
 }

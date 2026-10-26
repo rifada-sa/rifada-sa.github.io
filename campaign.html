@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>لوحة الحملة | رِفادة</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>رِفادة</h1>
+        <nav>
+            <a href="index.html">الرئيسية</a>
+        </nav>
+        <button id="theme-btn">🌙 ليل مزدلفة</button>
+    </header>
+    <main>
+        <section class="campaign-hero">
+            <h1>اكتب يوم حجّاجك</h1>
+            <p>مرة وحدة. وكل تعديل يوصلهم في لحظته.</p>
+        </section>
+
+        <form id="campaign-form">
+            <label for="campaign-name">اسم الحملة</label>
+            <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>
+
+            <label for="day-name">اليوم</label>
+            <select id="day-name">
+                <option>يوم التروية · ٨ ذو الحجة</option>
+                <option>يوم عرفة · ٩ ذو الحجة</option>
+                <option>يوم النحر · ١٠ ذو الحجة</option>
+                <option>أول أيام التشريق · ١١ ذو الحجة</option>
+                <option>ثاني أيام التشريق · ١٢ ذو الحجة</option>
+                <option>ثالث أيام التشريق · ١٣ ذو الحجة</option>
+            </select>
+
+            <label for="day-date">التاريخ</label>
+            <input type="date" id="day-date">
+
+            <h2>مسبحة اليوم</h2>
+            <ol id="events">
+                <li class="event">
+                    <input type="time" aria-label="الوقت">
+                    <input type="text" aria-label="الفعالية" placeholder="مثلاً: الانطلاق إلى منى">
+                    <button type="button" class="remove" aria-label="حذف الفعالية">✕</button>
+                </li>
+            </ol>
+            <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
+
+            <button type="submit">انشر اليوم لحجّاجك</button>
+        </form>
+    </main>
+    <footer>
+        <p>صُنع بحب لضيوف الرحمن 🤍</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>
