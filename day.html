@@ -20,30 +20,42 @@
         <button id="theme-btn">🌙 ليل مزدلفة</button>
     </header>
     <main>
-        <section>
-            <h2>اليوم: التروية</h2>
-            <p>٨ ذو الحجة · منى</p>
-            <ul class="timeline">
-                <li><strong>٧:٠٠ ص</strong> الإحرام والتلبية في السكن</li>
-                <li><strong>٩:٠٠ ص</strong> التحرك بالحافلات إلى منى</li>
-                <li><strong>١٢:٠٠ م</strong> صلاة الظهر في المخيم</li>
-                <li><strong>٩:٠٠ م</strong> المبيت في منى</li>
-            </ul>
+        <!-- البرنامج الحقيقي (يظهر لما يكون في الرابط ?c=) -->
+        <section id="live" hidden>
+            <p id="live-campaign"></p>
+            <h2 id="live-title">جاري تحميل برنامجك…</h2>
+            <p id="live-date"></p>
+            <ul class="timeline" id="live-events"></ul>
         </section>
-        <section>
-            <h2>بكرة: يوم عرفة</h2>
-            <p>٩ ذو الحجة · عرفات</p>
-            <ul class="timeline">
-                <li><strong>٦:٠٠ ص</strong> التحرك إلى عرفات</li>
-                <li><strong>١٢:٠٠ م</strong> صلاة الظهر والعصر جمعًا وقصرًا</li>
-                <li><strong>بعد الغروب</strong> النفرة إلى مزدلفة</li>
-            </ul>
-        </section>
+
+        <!-- مثال (يظهر لما تنفتح الصفحة بدون رابط حملة) -->
+        <div id="demo">
+            <section>
+                <h2>اليوم: التروية</h2>
+                <p>٨ ذو الحجة · منى</p>
+                <ul class="timeline">
+                    <li><strong>٧:٠٠ ص</strong> الإحرام والتلبية في السكن</li>
+                    <li><strong>٩:٠٠ ص</strong> التحرك بالحافلات إلى منى</li>
+                    <li><strong>١٢:٠٠ م</strong> صلاة الظهر في المخيم</li>
+                    <li><strong>٩:٠٠ م</strong> المبيت في منى</li>
+                </ul>
+            </section>
+            <section>
+                <h2>بكرة: يوم عرفة</h2>
+                <p>٩ ذو الحجة · عرفات</p>
+                <ul class="timeline">
+                    <li><strong>٦:٠٠ ص</strong> التحرك إلى عرفات</li>
+                    <li><strong>١٢:٠٠ م</strong> صلاة الظهر والعصر جمعًا وقصرًا</li>
+                    <li><strong>بعد الغروب</strong> النفرة إلى مزدلفة</li>
+                </ul>
+            </section>
+        </div>
     </main>
     <footer>
         <p>صُنع بحب لضيوف الرحمن 🤍</p>
     </footer>
     <script src="script.js"></script>
+    <script type="module" src="day.js"></script>
 </body>
 
 </html>

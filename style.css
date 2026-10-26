@@ -301,3 +301,47 @@ body.night {
     font-size: 19px;
     cursor: pointer;
 }
+/* ===== دخول الحملة ===== */
+[hidden] {
+    display: none !important;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#login-form input {
+    font: inherit;
+    height: 48px;
+    padding: 0 14px;
+    border: 1.5px solid var(--stone);
+    border-radius: 12px;
+    background-color: var(--card);
+    color: inherit;
+    box-sizing: border-box;
+}
+
+#login-form button {
+    margin-top: 8px;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#login-msg {
+    color: var(--alert);
+    margin: 0;
+}
+
+#publish-msg a {
+    color: var(--rawasheen);
+    font-weight: 700;
+    word-break: break-all;
+}

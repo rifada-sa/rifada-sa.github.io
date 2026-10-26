@@ -20,45 +20,66 @@
         <button id="theme-btn">🌙 ليل مزدلفة</button>
     </header>
     <main>
-        <section class="campaign-hero">
-            <h1>اكتب يوم حجّاجك</h1>
-            <p>مرة وحدة. وكل تعديل يوصلهم في لحظته.</p>
+        <section id="login-box">
+            <h2>دخول الحملة</h2>
+            <form id="login-form">
+                <label for="login-email">الإيميل</label>
+                <input type="email" id="login-email" autocomplete="email" required>
+
+                <label for="login-password">كلمة السر</label>
+                <input type="password" id="login-password" autocomplete="current-password" required>
+
+                <button type="submit">دخول</button>
+                <p id="login-msg" role="alert"></p>
+            </form>
         </section>
 
-        <form id="campaign-form">
-            <label for="campaign-name">اسم الحملة</label>
-            <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>
+        <div id="dashboard" hidden>
+            <section class="campaign-hero">
+                <h1>اكتب يوم حجّاجك</h1>
+                <p>مرة وحدة. وكل تعديل يوصلهم في لحظته.</p>
+            </section>
 
-            <label for="day-name">اليوم</label>
-            <select id="day-name">
-                <option>يوم التروية · ٨ ذو الحجة</option>
-                <option>يوم عرفة · ٩ ذو الحجة</option>
-                <option>يوم النحر · ١٠ ذو الحجة</option>
-                <option>أول أيام التشريق · ١١ ذو الحجة</option>
-                <option>ثاني أيام التشريق · ١٢ ذو الحجة</option>
-                <option>ثالث أيام التشريق · ١٣ ذو الحجة</option>
-            </select>
+            <form id="campaign-form">
+                <label for="campaign-name">اسم الحملة</label>
+                <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>
 
-            <label for="day-date">التاريخ</label>
-            <input type="date" id="day-date">
+                <label for="day-name">اليوم</label>
+                <select id="day-name">
+                    <option>يوم التروية · ٨ ذو الحجة</option>
+                    <option>يوم عرفة · ٩ ذو الحجة</option>
+                    <option>يوم النحر · ١٠ ذو الحجة</option>
+                    <option>أول أيام التشريق · ١١ ذو الحجة</option>
+                    <option>ثاني أيام التشريق · ١٢ ذو الحجة</option>
+                    <option>ثالث أيام التشريق · ١٣ ذو الحجة</option>
+                </select>
 
-            <h2>مسبحة اليوم</h2>
-            <ol id="events">
-                <li class="event">
-                    <input type="time" aria-label="الوقت">
-                    <input type="text" aria-label="الفعالية" placeholder="مثلاً: الانطلاق إلى منى">
-                    <button type="button" class="remove" aria-label="حذف الفعالية">✕</button>
-                </li>
-            </ol>
-            <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
+                <label for="day-date">التاريخ</label>
+                <input type="date" id="day-date">
 
-            <button type="submit">انشر اليوم لحجّاجك</button>
-        </form>
+                <h2>مسبحة اليوم</h2>
+                <ol id="events"></ol>
+                <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
+
+                <button type="submit">انشر اليوم لحجّاجك</button>
+                <p id="publish-msg" role="status"></p>
+            </form>
+        </div>
+
+        <!-- قالب الحبّة: الجافاسكربت ينسخه كل ما نضغط "أضف" -->
+        <template id="event-template">
+            <li class="event">
+                <input type="time" aria-label="الوقت">
+                <input type="text" aria-label="الفعالية" placeholder="مثلاً: الانطلاق إلى منى">
+                <button type="button" class="remove" aria-label="حذف الفعالية">✕</button>
+            </li>
+        </template>
     </main>
     <footer>
         <p>صُنع بحب لضيوف الرحمن 🤍</p>
     </footer>
     <script src="script.js"></script>
+    <script type="module" src="campaign.js"></script>
 </body>
 
 </html>
