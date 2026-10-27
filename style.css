@@ -7,6 +7,7 @@
     --stone: #E6D9C2;     /* حجر منقبي: الحدود */
     --alert: #9E2B25;     /* أحمر: للتنبيه بس */
     --card: #FFFCF6;
+    --on-saffron: #3B2418; /* النص والعلامات فوق الزعفران: غامق دايماً */
 }
 
 /* أي عنصر فيه hidden يختفي، حتى لو له display في مكان ثاني */
@@ -141,6 +142,7 @@ body.night {
     --date: #F3EBDD;
     --rawasheen: #7CC1B6;
     --stone: #2A3350;
+    --on-saffron: #121829;
 }
 
 /* زر الوضع الليلي */
@@ -502,6 +504,385 @@ body.night {
     margin: 0;
     opacity: 0.75;
 }
+
+/* ----- هيرو صفحة الحاج (يستخدم .hero من الرئيسية) ----- */
+/* .hero.day-hero أقوى من .hero لحاله، فيغلب قواعد الرئيسية اللي تحت في الملف */
+.hero.day-hero {
+    padding-bottom: 34px;
+    overflow: hidden; /* الخيام ما تطلع برا الزوايا الدائرية */
+}
+
+.hero a.logo {
+    color: inherit;
+    text-decoration: none;
+}
+
+.day-hero .roshan {
+    width: 56px;
+    height: auto;
+    top: 76px;
+}
+
+.day-hero .hero-text {
+    margin-top: 14px;
+    padding-left: 72px; /* مكان الروشان */
+}
+
+.hero.day-hero h1 {
+    font-size: 34px;
+    margin: 2px 0;
+}
+
+/* قوس اليوم */
+.arc-wrap {
+    position: relative;
+    max-width: 380px;
+    margin: 8px auto 0;
+}
+
+.day-arc {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.arc-track {
+    fill: none;
+    stroke: var(--ihram);
+    stroke-width: 2;
+    stroke-dasharray: 3 7;
+    stroke-linecap: round;
+    opacity: 0.6;
+}
+
+.arc-passed {
+    fill: none;
+    stroke: var(--saffron);
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.sun,
+.bead-past {
+    fill: var(--saffron);
+}
+
+.sun-glow {
+    fill: var(--saffron);
+    opacity: 0.25;
+}
+
+.bead-check {
+    fill: none;
+    stroke: var(--on-saffron);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* الحالية: ممتلئة مع هالة، والجاية: إطار بس */
+.bead-now,
+.bead-next {
+    fill: var(--rawasheen);
+    stroke: var(--ihram);
+    stroke-width: 2.5;
+}
+
+.bead-halo {
+    fill: var(--ihram);
+    opacity: 0.3;
+}
+
+/* الساعة الكبيرة و"التالي بعد X" وسط القوس */
+.arc-now {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6%;
+    text-align: center;
+}
+
+#now-time {
+    margin: 0;
+    font-family: "Reem Kufi", sans-serif;
+    font-size: clamp(34px, 11vw, 44px); /* يصغر على الجوالات الضيقة */
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+/* "ص/م" صغيرة جنب الأرقام (em = نسبة من حجم الساعة) */
+.ampm {
+    font-family: "Tajawal", sans-serif;
+    font-size: 0.4em;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+#now-next {
+    margin: 0;
+    font-size: 15px;
+}
+
+.arc-ends {
+    display: flex;
+    justify-content: space-between;
+    max-width: 380px;
+    margin: 0 auto;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* خيام منى: تلمس حافة العقود تحت */
+.tents {
+    display: block;
+    width: calc(100% + 40px);
+    height: 36px;
+    margin: 6px -20px -21px;
+}
+
+.tent {
+    fill: var(--ihram);
+    fill-opacity: 0.16;
+    stroke: var(--rawasheen);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+}
+
+/* ----- رحلتك في المشاعر ----- */
+.journey {
+    margin: 22px 0;
+}
+
+.journey-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.journey-top span {
+    opacity: 0.75;
+}
+
+.journey-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.journey-bar span {
+    flex: 1;
+    height: 10px;
+    border-radius: 3px;
+    background-color: var(--stone);
+}
+
+.journey-bar .done {
+    background-color: var(--rawasheen);
+}
+
+/* ----- مسبحة يومك ----- */
+.masbaha h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    font-size: 22px;
+    color: var(--date);
+}
+
+/* أيقونة الخيام: نفس طريقة حافة العقود، بس صغيرة */
+.tents-icon {
+    width: 24px;
+    height: 12px;
+    flex-shrink: 0;
+    background:
+        radial-gradient(circle at 50% 4px, var(--rawasheen) 3.5px, transparent 4px) 0 0 / 8px 12px,
+        linear-gradient(90deg, transparent 0.5px, var(--rawasheen) 0.5px 7.5px, transparent 7.5px) 0 4px / 8px 8px repeat-x;
+}
+
+.masbaha-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* الخيط اللي يربط الحبّات */
+.masbaha-list::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    right: 13px;
+    width: 2px;
+    background-color: var(--date);
+    opacity: 0.2;
+}
+
+.masbaha-list li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bead {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ihram);
+    border: 2px solid var(--stone);
+}
+
+.ev-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ev-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.ev-title {
+    font-size: 17px;
+}
+
+.ev-time {
+    font-size: 14px;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+/* مضت: حبّة زعفران مع ✓، والنص باهت ومشطوب */
+.past .bead {
+    background-color: var(--saffron);
+    border: none;
+}
+
+.past .bead path {
+    fill: none;
+    stroke: var(--on-saffron);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.past .ev-title {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* الآن: بطاقة بنية */
+.now .bead {
+    background-color: var(--rawasheen);
+    border: none;
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--rawasheen) 22%, transparent);
+}
+
+.now .ev-body {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--date);
+    color: var(--ihram);
+    border-radius: 18px;
+    padding: 16px 18px 24px;
+}
+
+.now .ev-title {
+    display: block;
+    margin-top: 6px;
+    font-size: 22px; /* Tajawal (من body): أريح للجمل الطويلة من Reem Kufi */
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.now .ev-time {
+    opacity: 0.8;
+}
+
+/* شارة "الآن": الزعفران خلفية، والنص غامق */
+.now-badge {
+    background-color: var(--saffron);
+    color: var(--on-saffron);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* شريط مشربية رفيع أسفل البطاقة */
+.mashrabiya {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 10px;
+    background:
+        repeating-linear-gradient(45deg, var(--ihram) 0 1.5px, transparent 1.5px 8px),
+        repeating-linear-gradient(-45deg, var(--ihram) 0 1.5px, transparent 1.5px 8px);
+    opacity: 0.3;
+}
+
+/* التالي: بطاقة فاتحة، و"التالي · بعد X" أخضر عريض */
+.next .bead {
+    border: 3px solid var(--rawasheen);
+}
+
+.next .ev-body {
+    background-color: var(--card);
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: 0 10px 24px -16px rgba(59, 36, 24, 0.4);
+}
+
+.next-label,
+.next .ev-time {
+    color: var(--rawasheen);
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 1;
+}
+
+.next .ev-title {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ----- خط السماء الحجازي في الفوتر ----- */
+.skyline {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 16px;
+}
+
+.sky-wall {
+    fill: var(--stone);
+}
+
+.sky-detail {
+    fill: var(--date);
+    fill-opacity: 0.08;
+}
+
+.sky-lattice {
+    stroke: var(--date);
+    stroke-opacity: 0.18;
+    stroke-width: 1;
+}
 /* ===== الصفحة الرئيسية ===== */
 
 /* الهيدر الأخضر */
@@ -763,7 +1144,8 @@ body.night {
         display: none;
     }
 
-    .hero-text {
+    .hero-text,
+    .day-hero .hero-text {
         padding-left: 0;
     }
 }

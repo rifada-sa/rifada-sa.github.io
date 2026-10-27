@@ -12,12 +12,52 @@
 </head>
 
 <body>
-    <header>
-        <h1>رِفادة</h1>
-        <nav>
-            <a href="index.html">الرئيسية</a>
-        </nav>
-        <button id="theme-btn">🌙 ليل مزدلفة</button>
+    <!-- الهيرو الأخضر: فوق دايماً الشعار وزر الليل، والباقي يظهر أيام الحج بس -->
+    <header class="hero day-hero">
+        <div class="hero-top">
+            <a class="logo" href="index.html">رِفادة</a>
+            <button id="theme-btn">🌙 ليل مزدلفة</button>
+        </div>
+
+        <div id="today-hero" hidden>
+            <svg aria-hidden="true" width="96" height="178" viewBox="0 0 96 178" class="roshan"><defs><pattern id="rl" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0L8 8M8 0L0 8" stroke="rgba(247,241,230,0.32)" stroke-width="1.2"></path></pattern></defs><path d="M4 4H92V12H4Z" fill="rgba(247,241,230,0.22)"></path><path d="M8 150V52a40 40 0 0 1 80 0V150Z" fill="rgba(247,241,230,0.06)" stroke="rgba(247,241,230,0.5)" stroke-width="2"></path><path d="M16 146V54a32 32 0 0 1 64 0V146Z" fill="url(#rl)"></path><path d="M16 104H80M48 22V146" stroke="rgba(247,241,230,0.4)" stroke-width="2"></path><path d="M2 150H94V158H2Z" fill="rgba(247,241,230,0.3)"></path><path d="M10 158H24L17 172Z M41 158H55L48 172Z M72 158H86L79 172Z" fill="rgba(247,241,230,0.22)"></path></svg>
+
+            <div class="hero-text">
+                <p class="eyebrow" id="greeting"></p>
+                <h1 id="today-title"></h1>
+                <p class="eyebrow" id="today-sub"></p>
+            </div>
+
+            <!-- قوس اليوم: من الفجر (٤:٠٠، يمين) إلى الليل (٢٤:٠٠، يسار) -->
+            <div class="arc-wrap">
+                <svg class="day-arc" viewBox="-12 -12 374 194" aria-hidden="true">
+                    <!-- القوس كامل (منقّط) -->
+                    <path class="arc-track" d="M330 170 A155 155 0 0 0 20 170"></path>
+                    <!-- نفس القوس، والجافاسكربت يلوّن منه اللي مضى بس -->
+                    <path class="arc-passed" id="arc-passed" d="M330 170 A155 155 0 0 0 20 170" pathLength="100"></path>
+                    <!-- حبّات الفعاليات: الجافاسكربت يرسمها هنا -->
+                    <g id="arc-beads"></g>
+                    <!-- الشمس (آخر شي عشان تطلع فوق الحبّات) -->
+                    <circle class="sun-glow" id="sun-glow" r="22"></circle>
+                    <circle class="sun" id="sun" r="13"></circle>
+                </svg>
+                <div class="arc-now">
+                    <p id="now-time"></p>
+                    <p id="now-next"></p>
+                </div>
+            </div>
+            <div class="arc-ends"><span>الفجر</span><span>الليل</span></div>
+
+            <!-- خيام منى: خيمة وحدة تتكرر بعرض الهيرو -->
+            <svg class="tents" aria-hidden="true">
+                <defs>
+                    <pattern id="tent" width="40" height="36" patternUnits="userSpaceOnUse">
+                        <path class="tent" d="M0 36L6 18L20 8L34 18L40 36Z"></path>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="36" fill="url(#tent)"></rect>
+            </svg>
+        </div>
     </header>
     <main>
         <!-- البرنامج الحقيقي (يظهر لما يكون في الرابط ?c=) -->
@@ -56,6 +96,49 @@
     </main>
     <footer>
         <p>صُنع بحب لضيوف الرحمن 🤍</p>
+        <!-- خط السماء الحجازي: بيوت، وفوقها شرفات، وفيها رواشين -->
+        <svg class="skyline" viewBox="0 0 390 110" aria-hidden="true">
+            <defs>
+                <pattern id="msh" width="6" height="6" patternUnits="userSpaceOnUse">
+                    <rect class="sky-detail" width="6" height="6"></rect>
+                    <path class="sky-lattice" d="M0 0L6 6M6 0L0 6"></path>
+                </pattern>
+            </defs>
+            <!-- البيوت -->
+            <g class="sky-wall">
+                <rect x="0" y="34" width="44" height="76"></rect>
+                <rect x="44" y="6" width="60" height="104"></rect>
+                <rect x="104" y="44" width="46" height="66"></rect>
+                <rect x="150" y="18" width="70" height="92"></rect>
+                <rect x="220" y="40" width="50" height="70"></rect>
+                <rect x="270" y="10" width="64" height="100"></rect>
+                <rect x="334" y="30" width="56" height="80"></rect>
+            </g>
+            <!-- الشرفات فوق البيوت، والأبواب -->
+            <g class="sky-detail">
+                <rect x="0" y="28" width="44" height="6"></rect>
+                <rect x="44" y="0" width="60" height="6"></rect>
+                <rect x="104" y="38" width="46" height="6"></rect>
+                <rect x="150" y="12" width="70" height="6"></rect>
+                <rect x="220" y="34" width="50" height="6"></rect>
+                <rect x="270" y="4" width="64" height="6"></rect>
+                <rect x="334" y="24" width="56" height="6"></rect>
+                <path d="M119 110V98a8 8 0 0 1 16 0V110Z M237 110V98a8 8 0 0 1 16 0V110Z M296 110V100a6 6 0 0 1 12 0V110Z"></path>
+            </g>
+            <!-- الرواشين: خلفية + نقش مشربية -->
+            <g fill="url(#msh)">
+                <rect x="10" y="48" width="24" height="28"></rect>
+                <rect x="56" y="20" width="36" height="30"></rect>
+                <rect x="56" y="60" width="36" height="30"></rect>
+                <rect x="114" y="58" width="26" height="26"></rect>
+                <rect x="162" y="32" width="46" height="36"></rect>
+                <rect x="162" y="76" width="46" height="22"></rect>
+                <rect x="232" y="54" width="26" height="28"></rect>
+                <rect x="282" y="24" width="40" height="30"></rect>
+                <rect x="282" y="64" width="40" height="26"></rect>
+                <rect x="346" y="44" width="32" height="34"></rect>
+            </g>
+        </svg>
     </footer>
     <script src="script.js"></script>
     <script type="module" src="day.js"></script>
