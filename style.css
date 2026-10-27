@@ -9,6 +9,11 @@
     --card: #FFFCF6;
 }
 
+/* أي عنصر فيه hidden يختفي، حتى لو له display في مكان ثاني */
+[hidden] {
+    display: none !important;
+}
+
 /* الصفحة كاملة */
 body {
     background-color: var(--ihram);
@@ -301,18 +306,48 @@ body.night {
     font-size: 19px;
     cursor: pointer;
 }
-/* ===== دخول الحملة ===== */
-[hidden] {
-    display: none !important;
+/* ===== حساب الحملة ===== */
+
+/* التبويبات */
+.tabs {
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    margin-bottom: 18px;
+    background-color: var(--ihram);
+    border-radius: 14px;
 }
 
-#login-form {
+.tab {
+    flex: 1;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    color: var(--date);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.tab[aria-selected="true"] {
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+}
+
+/* نموذجا الحساب الجديد والدخول */
+.auth-form {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-#login-form input {
+.auth-form label {
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.auth-form input {
     font: inherit;
     height: 48px;
     padding: 0 14px;
@@ -323,7 +358,12 @@ body.night {
     box-sizing: border-box;
 }
 
-#login-form button {
+.auth-form input:focus {
+    outline: 2px solid var(--rawasheen);
+    outline-offset: 1px;
+}
+
+.auth-form button[type="submit"] {
     margin-top: 8px;
     height: 52px;
     border: none;
@@ -335,9 +375,64 @@ body.night {
     cursor: pointer;
 }
 
-#login-msg {
+/* زر شكله رابط: "نسيت كلمة السر؟" */
+.link-btn {
+    align-self: center;
+    border: none;
+    background: none;
+    padding: 6px;
+    color: var(--rawasheen);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* رسائل النماذج: حمراء للخطأ، خضراء للنجاح */
+.form-msg {
     color: var(--alert);
     margin: 0;
+}
+
+.form-msg.ok,
+#publish-msg.ok {
+    color: var(--rawasheen);
+}
+
+/* شريط رمز الحملة فوق اللوحة */
+#code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    background-color: var(--card);
+    border: 1.5px solid var(--stone);
+    border-radius: 14px;
+}
+
+#code-bar p {
+    margin: 0;
+}
+
+#campaign-code {
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--rawasheen);
+}
+
+#logout-btn {
+    height: 40px;
+    padding: 0 16px;
+    border: 1.5px solid var(--rawasheen);
+    border-radius: 10px;
+    background: none;
+    color: var(--rawasheen);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
 }
 
 #publish-msg a {
