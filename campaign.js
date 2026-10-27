@@ -4,7 +4,8 @@ import {
     createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
     signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { doc, getDoc, setDoc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, writeBatch, deleteField, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { DAYS, getDay, dateOfDay, formatDate } from "./days.js";
 
 const authBox = document.getElementById("auth-box");
 const tabSignup = document.getElementById("tab-signup");
@@ -16,6 +17,9 @@ const loginMsg = document.getElementById("login-msg");
 const dashboard = document.getElementById("dashboard");
 const codeEl = document.getElementById("campaign-code");
 const form = document.getElementById("campaign-form");
+const startInput = document.getElementById("start-date");
+const dayTabs = document.getElementById("day-tabs");
+const dayLine = document.getElementById("day-line");
 const eventsList = document.getElementById("events");
 const template = document.getElementById("event-template");
 const publishMsg = document.getElementById("publish-msg");
@@ -151,6 +155,7 @@ onAuthStateChanged(auth, async function (user) {
         authBox.hidden = false;
         dashboard.hidden = true;
         form.reset();
+        days = emptyDays();
         showMsg(publishMsg, "");
         codeEl.textContent = "";
         return;
@@ -167,16 +172,24 @@ onAuthStateChanged(auth, async function (user) {
 
     // نجيب البرنامج المحفوظ (لو فيه)
     const saved = await getDoc(doc(db, "campaigns", user.uid));
-    const data = saved.exists() ? saved.data() : {};
-    eventsList.innerHTML = "";
+    let data = saved.exists() ? saved.data() : {};
+    data = await migrateOldDay(user.uid, data);
+
     if (data.name) document.getElementById("campaign-name").value = data.name;
-    if (data.dayName) document.getElementById("day-name").value = data.dayName;
-    if (data.date) document.getElementById("day-date").value = data.date;
-    (data.events || []).forEach(function (ev) {
-        addEvent(ev.time, ev.title);
-    });
-    if (data.events) showLink(user.uid); // نشرت قبل
-    if (eventsList.children.length === 0) addEvent();
+    if (data.startDate) startInput.value = data.startDate;
+
+    // ننقل حبّات كل يوم من Firestore للمتغير days
+    days = emptyDays();
+    if (data.days) {
+        DAYS.forEach(function (day) {
+            const stored = data.days[day.num];
+            if (stored && stored.events) days[day.num] = stored.events;
+        });
+        showLink(user.uid); // نشرت قبل
+    }
+    // نفتح على أول يوم فيه فعاليات، ولو ما فيه شي نفتح على ٨
+    const firstDay = DAYS.find(function (day) { return days[day.num].length > 0; });
+    showDay(firstDay ? firstDay.num : "8");
 
     codeEl.textContent = "……";
     try {
@@ -186,7 +199,116 @@ onAuthStateChanged(auth, async function (user) {
     }
 });
 
-// ٨) إضافة حبّة للمسبحة
+// ٨) الأيام: حبّات كل يوم محفوظة هنا لين ننشر
+let days = emptyDays();   // { "8": [...], "9": [...], ... }
+let currentDay = "8";     // اليوم اللي معروض الحين
+
+function emptyDays() {
+    const result = {};
+    DAYS.forEach(function (day) { result[day.num] = []; });
+    return result;
+}
+
+// نسوي زر لكل يوم: الرقم كبير وتحته الاسم الصغير
+DAYS.forEach(function (day) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "day-tab";
+    btn.setAttribute("role", "tab");
+    btn.dataset.day = day.num; // نحفظ رقم اليوم في الزر نفسه
+    const number = document.createElement("strong");
+    number.textContent = day.ar;
+    const name = document.createElement("small");
+    name.textContent = day.short;
+    btn.append(number, name);
+    dayTabs.appendChild(btn);
+});
+
+// مستمع واحد للأزرار كلها
+dayTabs.addEventListener("click", function (e) {
+    const btn = e.target.closest(".day-tab");
+    if (btn) selectDay(btn.dataset.day);
+});
+
+// نقرأ الحبّات اللي في الشاشة (حتى الناقصة، عشان ما يضيع شي وأنت تكتب)
+function collectEvents() {
+    return [...eventsList.querySelectorAll(".event")].map(function (li) {
+        return {
+            time: li.querySelector('input[type="time"]').value,
+            title: li.querySelector('input[type="text"]').value.trim()
+        };
+    });
+}
+
+// لما تضغط يوم: نحفظ اليوم الحالي أول، بعدين نعرض الثاني
+function selectDay(num) {
+    days[currentDay] = collectEvents();
+    showDay(num);
+}
+
+// نعرض حبّات يوم (بدون ما نحفظ اللي في الشاشة)
+function showDay(num) {
+    currentDay = num;
+    dayTabs.querySelectorAll(".day-tab").forEach(function (btn) {
+        btn.setAttribute("aria-selected", btn.dataset.day === num);
+    });
+    eventsList.innerHTML = "";
+    days[num].forEach(function (ev) {
+        addEvent(ev.time, ev.title);
+    });
+    if (eventsList.children.length === 0) addEvent();
+    updateDayLine();
+}
+
+// "يوم التروية · الجمعة، ١٤ مايو"، أو "يوم التروية · ٨ ذو الحجة" لو ما فيه تاريخ
+function updateDayLine() {
+    const day = getDay(currentDay);
+    const when = startInput.value
+        ? formatDate(dateOfDay(startInput.value, currentDay))
+        : day.ar + " ذو الحجة";
+    dayLine.textContent = day.name + " · " + when;
+}
+
+startInput.addEventListener("input", updateDayLine);
+
+// ٩) تحويل الشكل القديم (يوم واحد) للجديد (أيام)، مرة وحدة بس
+const OLD_DAY_NAMES = [
+    "يوم التروية · ٨ ذو الحجة",
+    "يوم عرفة · ٩ ذو الحجة",
+    "يوم النحر · ١٠ ذو الحجة",
+    "أول أيام التشريق · ١١ ذو الحجة",
+    "ثاني أيام التشريق · ١٢ ذو الحجة",
+    "ثالث أيام التشريق · ١٣ ذو الحجة"
+];
+
+async function migrateOldDay(uid, data) {
+    if (!data.events || data.days) return data; // جديد أصلاً، أو ما نشرت شي
+
+    // "يوم عرفة · ٩ ذو الحجة" ← مكانه في القائمة 1 ← اليوم "9" (لو ما لقيناه نعتبره ٨)
+    const index = OLD_DAY_NAMES.indexOf(data.dayName);
+    const num = String(8 + Math.max(index, 0));
+
+    const newDays = {};
+    DAYS.forEach(function (day) { newDays[day.num] = { events: [] }; });
+    newDays[num] = { events: data.events };
+
+    const result = { name: data.name, code: data.code, days: newDays };
+    if (num === "8" && data.date) result.startDate = data.date;
+
+    try {
+        await setDoc(doc(db, "campaigns", uid), {
+            ...result,               // الحقول الجديدة
+            dayName: deleteField(),  // ونحذف القديمة
+            date: deleteField(),
+            events: deleteField()
+        }, { merge: true });
+    } catch (error) {
+        // لو فشل (مثلاً النت): نكمل بالشكل الجديد في الشاشة، ونعيد المحاولة الدخول الجاي
+    }
+    return result;
+}
+
+// ١٠) إضافة حبّة للمسبحة
 function addEvent(time = "", title = "") {
     const li = template.content.firstElementChild.cloneNode(true);
     li.querySelector('input[type="time"]').value = time;
@@ -198,45 +320,47 @@ document.getElementById("add-event").addEventListener("click", function () {
     addEvent();
 });
 
-// ٩) حذف حبّة (مستمع واحد للقائمة كلها)
+// ١١) حذف حبّة (مستمع واحد للقائمة كلها)
 eventsList.addEventListener("click", function (e) {
     if (e.target.closest(".remove")) {
         e.target.closest(".event").remove();
     }
 });
 
-// ١٠) النشر
+// ١٢) النشر: كل الأيام مرة وحدة
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
     showMsg(publishMsg, "جاري النشر…");
+    days[currentDay] = collectEvents(); // اليوم المعروض ممكن فيه تعديلات ما انحفظت
 
-    // نجمع الحبّات، نتجاهل الفاضية، ونرتبها حسب الوقت
-    const events = [...eventsList.querySelectorAll(".event")]
-        .map(function (li) {
-            return {
-                time: li.querySelector('input[type="time"]').value,
-                title: li.querySelector('input[type="text"]').value.trim()
-            };
-        })
-        .filter(function (ev) { return ev.time && ev.title; })
-        .sort(function (a, b) { return a.time.localeCompare(b.time); });
+    // لكل يوم: نتجاهل الحبّات الناقصة، ونرتب الباقي حسب الوقت
+    const daysToSave = {};
+    DAYS.forEach(function (day) {
+        const events = days[day.num]
+            .filter(function (ev) { return ev.time && ev.title; })
+            .sort(function (a, b) { return a.time.localeCompare(b.time); });
+        daysToSave[day.num] = { events: events };
+    });
 
     try {
         // merge: نحدّث هالحقول بس، ونخلي الرمز (code) مثل ما هو
         await setDoc(doc(db, "campaigns", auth.currentUser.uid), {
             name: document.getElementById("campaign-name").value.trim(),
-            dayName: document.getElementById("day-name").value,
-            date: document.getElementById("day-date").value,
-            events: events,
+            startDate: startInput.value,
+            days: daysToSave,
             updatedAt: serverTimestamp()
         }, { merge: true });
+
+        // نخلي اللي في الذاكرة مثل اللي انحفظ (مرتب وبدون ناقص)، ونعيد عرض اليوم الحالي
+        DAYS.forEach(function (day) { days[day.num] = daysToSave[day.num].events; });
+        showDay(currentDay);
         showLink(auth.currentUser.uid);
     } catch (error) {
         showMsg(publishMsg, "ما قدرنا ننشر، جرّب مرة ثانية");
     }
 });
 
-// ١١) الرابط الثابت للحجاج
+// ١٣) الرابط الثابت للحجاج
 function showLink(uid) {
     const url = new URL("day.html?c=" + uid, location.href).href;
     showMsg(publishMsg, "✓ وصل البرنامج لحجّاجك. رابط حملتك الثابت: ", true);

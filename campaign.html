@@ -70,24 +70,18 @@
                 <label for="campaign-name">اسم الحملة</label>
                 <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>
 
-                <label for="day-name">اليوم</label>
-                <select id="day-name">
-                    <option>يوم التروية · ٨ ذو الحجة</option>
-                    <option>يوم عرفة · ٩ ذو الحجة</option>
-                    <option>يوم النحر · ١٠ ذو الحجة</option>
-                    <option>أول أيام التشريق · ١١ ذو الحجة</option>
-                    <option>ثاني أيام التشريق · ١٢ ذو الحجة</option>
-                    <option>ثالث أيام التشريق · ١٣ ذو الحجة</option>
-                </select>
-
-                <label for="day-date">التاريخ</label>
-                <input type="date" id="day-date">
+                <label for="start-date">تاريخ يوم التروية (٨ ذو الحجة)</label>
+                <input type="date" id="start-date">
 
                 <h2>مسبحة اليوم</h2>
+                <!-- أزرار الأيام: الجافاسكربت يعبّيها من DAYS -->
+                <div class="day-tabs" id="day-tabs" role="tablist" aria-label="أيام الحج"></div>
+                <p id="day-line"></p>
+
                 <ol id="events"></ol>
                 <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
 
-                <button type="submit">انشر اليوم لحجّاجك</button>
+                <button type="submit">انشر الأيام لحجّاجك</button>
                 <p id="publish-msg" role="status"></p>
             </form>
         </div>

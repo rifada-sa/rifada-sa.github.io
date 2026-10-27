@@ -21,12 +21,15 @@
     </header>
     <main>
         <!-- البرنامج الحقيقي (يظهر لما يكون في الرابط ?c=) -->
-        <section id="live" hidden>
+        <div id="live" hidden>
             <p id="live-campaign"></p>
-            <h2 id="live-title">جاري تحميل برنامجك…</h2>
-            <p id="live-date"></p>
-            <ul class="timeline" id="live-events"></ul>
-        </section>
+            <!-- بطاقات "اليوم" و"بكرة": الجافاسكربت يرسمها هنا -->
+            <div id="live-days">
+                <section>
+                    <h2>جاري تحميل برنامجك…</h2>
+                </section>
+            </div>
+        </div>
 
         <!-- مثال (يظهر لما تنفتح الصفحة بدون رابط حملة) -->
         <div id="demo">
