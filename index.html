@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رِفادة</title>
+    <title>رِفادة | برنامج حجّك في جوّالك</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;700&display=swap"
         rel="stylesheet">
@@ -12,37 +12,76 @@
 </head>
 
 <body>
-    <header>
-        <h1>رِفادة</h1>
-        <p>منذ القِدم، كانت الرِّفادة شرفًا يتوارثه أهل مكة في إكرام ضيوف الرحمن. واليوم نكمل الحكاية بطريقتنا: تفاصيل
-            حملتك، وخطة يومك، وما ينتظرك غدًا، كلها بين يديك… لتتفرغ لحجّك بقلبٍ مطمئن.</p>
-        <nav>
-            <a href="#features">المزايا</a>
-            <a href="campaign.html">للحملات</a>
-            <a href="#contact">تواصل معنا</a>
-            <a href="day.html">يومك في المشاعر</a>
-        </nav>
-        <button id="theme-btn">🌙 ليل مزدلفة</button>
+    <!-- الهيدر الأخضر -->
+    <header class="hero">
+        <div class="hero-top">
+            <p class="logo">رِفادة</p>
+            <button id="theme-btn">🌙 ليل مزدلفة</button>
+        </div>
+        <svg aria-hidden="true" width="96" height="178" viewBox="0 0 96 178" class="roshan"><defs><pattern id="rl" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0L8 8M8 0L0 8" stroke="rgba(247,241,230,0.32)" stroke-width="1.2"></path></pattern></defs><path d="M4 4H92V12H4Z" fill="rgba(247,241,230,0.22)"></path><path d="M8 150V52a40 40 0 0 1 80 0V150Z" fill="rgba(247,241,230,0.06)" stroke="rgba(247,241,230,0.5)" stroke-width="2"></path><path d="M16 146V54a32 32 0 0 1 64 0V146Z" fill="url(#rl)"></path><path d="M16 104H80M48 22V146" stroke="rgba(247,241,230,0.4)" stroke-width="2"></path><path d="M2 150H94V158H2Z" fill="rgba(247,241,230,0.3)"></path><path d="M10 158H24L17 172Z M41 158H55L48 172Z M72 158H86L79 172Z" fill="rgba(247,241,230,0.22)"></path></svg>
+        <div class="hero-text">
+            <p class="eyebrow">على خُطى رِفادة قريش</p>
+            <h1>برنامج حجّك<br>في جوّالك</h1>
+            <p>من حملتك إليك، بدون تحميل تطبيق.</p>
+        </div>
     </header>
+
     <main>
-        <section id="features">
-            <h2>وش تقدّم رِفادة؟</h2>
-            <ul>
-                <li>خطة يومك في المشاعر، اليوم وبكرة</li>
-                <li>كل تفاصيل حملتك في مكان واحد</li>
-                <li>رمز QR يوصّل الحاج التائه لحملته</li>
-            </ul>
-        </section>
-        <section id="campaigns">
-            <h2>للحملات</h2>
-            <p>حدّث برنامج حملتك مرة وحدة، ويوصل لكل حجاجك بلغتهم.</p>
+        <!-- الخيار الأول: الحاج -->
+        <section class="choice pilgrim">
+            <h2>أنا حاج</h2>
+            <p class="choice-sub">أبغى أشوف برنامج يومي</p>
+
+            <form id="code-form">
+                <label for="code-input">رمز حملتك</label>
+                <div class="code-row">
+                    <input type="text" id="code-input" placeholder="NOOR24" dir="ltr"
+                        autocomplete="off" autocapitalize="characters" maxlength="8" required>
+                    <button type="submit">افتح</button>
+                </div>
+                <p id="code-msg" role="alert"></p>
+            </form>
+
+            <p class="or">أو</p>
+            <p class="qr-tip">امسح <b>QR الحملة</b> بكاميرا جوالك، ويفتح لك يومك على طول</p>
         </section>
 
-        <section id="contact">
+        <!-- الخيار الثاني: الحملة -->
+        <section class="choice campaign">
+            <h2>أنا حملة</h2>
+            <p class="choice-sub">أبغى أنظّم يوم حجّاجي</p>
+            <div class="btn-row">
+                <a class="btn btn-light" href="campaign.html#signup">حساب جديد</a>
+                <a class="btn btn-outline" href="campaign.html#login">تسجيل دخول</a>
+            </div>
+            <p class="free">مجاني، لوجه الله 🤍</p>
+        </section>
+
+        <!-- كيف تشتغل -->
+        <section class="plain">
+            <h2>كيف تشتغل؟</h2>
+            <ol class="steps">
+                <li><b>الحملة تكتب يومها</b><br>مسبحة من الفعاليات، من ٨ إلى ١٣ ذو الحجة</li>
+                <li><b>ترسل الرمز أو الـ QR</b><br>مرة وحدة بس، في قروب الواتساب أو مطبوع في المخيم</li>
+                <li><b>الحاج يشوف يومه</b><br>وأي تعديل يوصله في لحظته</li>
+            </ol>
+        </section>
+
+        <!-- القصة -->
+        <section id="story">
+            <h2>قصة الرِّفادة</h2>
+            <p>كانت الرِّفادة مالًا تُخرجه قريش كل موسم، يُصنع منه طعامٌ للحجاج أيام منى. فرضها قصيّ بن كلاب،
+                وتولّاها من بعده هاشم بن عبد مناف. واليوم نكمل الحكاية بطريقتنا: يوم الحاج في جوّاله، ليتفرّغ
+                لحجّه بقلبٍ مطمئن.</p>
+        </section>
+
+        <!-- تواصل معنا -->
+        <section id="contact" class="plain">
             <h2>تواصل معنا</h2>
-            <p>عندك حملة وتبي تجرّب رِفادة؟ راسلنا.</p>
+            <a class="btn btn-outline-green" href="mailto:rifada.sa.app@gmail.com">راسلنا بالإيميل</a>
         </section>
     </main>
+
     <footer>
         <p>صُنع بحب لضيوف الرحمن 🤍</p>
     </footer>

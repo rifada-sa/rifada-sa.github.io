@@ -345,3 +345,268 @@ body.night {
     font-weight: 700;
     word-break: break-all;
 }
+/* ===== الصفحة الرئيسية ===== */
+
+/* الهيدر الأخضر */
+.hero {
+    position: relative;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    border-radius: 24px;
+    padding: 20px 20px 80px;
+}
+
+.hero::after {
+    /* صف الأقواس تحت الهيدر */
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    background:
+        radial-gradient(circle at 50% 7px, var(--ihram) 6.5px, transparent 7px) 0 0 / 18px 14px,
+        linear-gradient(90deg, transparent 2.5px, var(--ihram) 2.5px 15.5px, transparent 15.5px) 0 7px / 18px 7px repeat-x;
+}
+
+.hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-family: "Aref Ruqaa", serif;
+    font-size: 40px;
+    margin: 0;
+    line-height: 1;
+}
+
+.hero #theme-btn {
+    position: static;
+    background-color: transparent;
+    color: var(--ihram);
+    border: 1.5px solid currentColor;
+}
+
+.roshan {
+    position: absolute;
+    left: 18px;
+    top: 92px;
+}
+
+.hero-text {
+    margin-top: 34px;
+    padding-left: 112px;
+}
+
+.hero h1 {
+    color: var(--ihram);
+    font-size: 38px;
+    line-height: 1.2;
+    margin: 6px 0 10px;
+        font-family: "Reem Kufi", sans-serif;
+}
+
+.eyebrow {
+    font-size: 14px;
+    opacity: 0.85;
+    margin: 0;
+}
+
+/* بطاقات الاختيار */
+.choice {
+    border: none;
+    border-radius: 22px;
+    padding: 22px 20px;
+}
+
+.choice h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.choice-sub {
+    margin: 0 0 14px;
+    opacity: 0.8;
+}
+
+.pilgrim {
+    position: relative;
+    margin-top: -56px;
+    box-shadow: 0 18px 40px -18px rgba(59, 36, 24, 0.35);
+}
+
+#code-form label {
+    font-weight: 700;
+}
+
+.code-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+#code-input {
+    flex: 1;
+    min-width: 0;
+    height: 52px;
+    box-sizing: border-box;
+    border: 1.5px solid var(--stone);
+    border-radius: 12px;
+    background-color: var(--card);
+    color: inherit;
+    font: inherit;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.code-row button {
+    width: 96px;
+    height: 52px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#code-msg {
+    color: var(--alert);
+    margin: 6px 0 0;
+}
+
+.or {
+    text-align: center;
+    opacity: 0.7;
+    margin: 8px 0;
+}
+
+.qr-tip {
+    background-color: var(--ihram);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0;
+}
+
+/* بطاقة الحملة: خشب الروشان مع نقش المشربية */
+.campaign {
+    background-color: var(--date);
+    color: var(--ihram);
+    background-image:
+        repeating-linear-gradient(45deg, rgba(247, 241, 230, 0.12) 0 1.5px, transparent 1.5px 9px),
+        repeating-linear-gradient(-45deg, rgba(247, 241, 230, 0.12) 0 1.5px, transparent 1.5px 9px);
+}
+
+.campaign h2 {
+    color: var(--ihram);
+}
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-light {
+    background-color: var(--ihram);
+    color: var(--date);
+}
+
+.btn-outline {
+    border: 1.5px solid var(--ihram);
+    color: var(--ihram);
+}
+
+.btn-outline-green {
+    border: 1.5px solid var(--rawasheen);
+    color: var(--rawasheen);
+}
+
+.free {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+    margin: 12px 0 0;
+}
+
+/* أقسام بدون بطاقة */
+.plain {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* كيف تشتغل: حبّات بأرقام */
+.steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+    position: relative;
+}
+
+.steps::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    right: 13px;
+    width: 2px;
+    background-color: var(--stone);
+}
+
+.steps li {
+    position: relative;
+    padding: 0 42px 16px 0;
+    counter-increment: step;
+}
+
+.steps li::before {
+    content: counter(step, arabic-indic);
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#story h2 {
+    font-family: "Aref Ruqaa", serif;
+}
+
+/* الجوال: الروشان يختفي لما الشاشة ضيقة جدًا */
+@media (max-width: 360px) {
+    .roshan {
+        display: none;
+    }
+
+    .hero-text {
+        padding-left: 0;
+    }
+}
