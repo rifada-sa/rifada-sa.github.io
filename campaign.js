@@ -16,6 +16,7 @@ const loginForm = document.getElementById("login-form");
 const loginMsg = document.getElementById("login-msg");
 const dashboard = document.getElementById("dashboard");
 const codeEl = document.getElementById("campaign-code");
+const previewLink = document.getElementById("preview-link");
 const alertForm = document.getElementById("alert-form");
 const alertText = document.getElementById("alert-text");
 const alertError = document.getElementById("alert-error");
@@ -173,6 +174,7 @@ onAuthStateChanged(auth, async function (user) {
         supervisorError.textContent = ""; // form.reset() ما يمسح رسائل الخطأ
         emergencyError.textContent = "";
         codeEl.textContent = "";
+        previewLink.hidden = true;
         alertForm.reset();
         alertError.textContent = "";
         alertUntil = 0;
@@ -435,6 +437,10 @@ function showLink(uid, justPublished) {
     a.href = url;
     a.textContent = url;
     publishMsg.appendChild(a);
+
+    // showLink تشتغل بس لو الحملة نشرت، فهنا نظهر "شوف كأنك حاج"
+    previewLink.href = url;
+    previewLink.hidden = false;
 }
 
 // ١٤) أرقام الحملة: تنظيف أرقام الجوال والتحقق منها
