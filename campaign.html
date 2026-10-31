@@ -74,11 +74,30 @@
                 <label for="start-date">تاريخ يوم التروية (٨ ذو الحجة)</label>
                 <input type="date" id="start-date">
 
+                <h2>أرقام الحملة</h2>
+                <p class="field-hint">تظهر لكل حاج عنده رابط الحملة، فاكتب أرقام العمل بس.</p>
+
+                <label for="supervisor-phone">رقم المشرف</label>
+                <input type="tel" id="supervisor-phone" inputmode="tel" dir="ltr" autocomplete="off" placeholder="05XXXXXXXX">
+                <p class="field-error" id="supervisor-error" role="alert"></p>
+
+                <label for="emergency-phone">رقم الطوارئ</label>
+                <input type="tel" id="emergency-phone" inputmode="tel" dir="ltr" autocomplete="off" placeholder="05XXXXXXXX">
+                <p class="field-error" id="emergency-error" role="alert"></p>
+
+                <label for="mina-camp">رقم مخيم منى</label>
+                <input type="text" id="mina-camp" maxlength="30" placeholder="مثلاً: ١٢٣ أو مربع ٥">
+
+                <label for="arafat-camp">رقم مخيم عرفات</label>
+                <input type="text" id="arafat-camp" maxlength="30" placeholder="مثلاً: ١٢٣ أو مربع ٥">
+
                 <h2>مسبحة اليوم</h2>
+                <p class="field-hint">لكل حبّة وقت تبدأ فيه، و«لين» اختياري. لو تركته فاضي، تبقى «الآن» ساعة وحدة.</p>
                 <!-- أزرار الأيام: الجافاسكربت يعبّيها من DAYS -->
                 <div class="day-tabs" id="day-tabs" role="tablist" aria-label="أيام الحج"></div>
                 <p id="day-line"></p>
 
+                <div class="events-head" aria-hidden="true"><span class="h-start">يبدأ</span><span class="h-end">لين (اختياري)</span></div>
                 <ol id="events"></ol>
                 <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
 
@@ -90,7 +109,8 @@
         <!-- قالب الحبّة: الجافاسكربت ينسخه كل ما نضغط "أضف" -->
         <template id="event-template">
             <li class="event">
-                <input type="time" aria-label="الوقت">
+                <input type="time" class="start-time" aria-label="يبدأ">
+                <input type="time" class="end-time" aria-label="لين (اختياري)">
                 <input type="text" aria-label="الفعالية" placeholder="مثلاً: الانطلاق إلى منى">
                 <button type="button" class="remove" aria-label="حذف الفعالية">✕</button>
             </li>

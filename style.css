@@ -199,6 +199,29 @@ body.night {
     outline-offset: 1px;
 }
 
+/* أرقام الحملة */
+.field-hint {
+    font-size: 14px;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.field-error {
+    color: var(--alert);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* رسالة الخطأ الفاضية ما تاخذ مكان */
+.field-error:empty {
+    display: none;
+}
+
+/* الأرقام تكتب من اليسار (dir=ltr)، بس تبقى يمين مثل باقي الحقول */
+input[type="tel"] {
+    text-align: right;
+}
+
 /* مسبحة اليوم */
 #events {
     list-style: none;
@@ -214,21 +237,47 @@ body.night {
     content: "";
     position: absolute;
     top: 24px;
-    bottom: 24px;
+    bottom: 80px; /* يوقف عند آخر حبّة: سطر العنوان (48) + الفراغ (8) + نص سطر الوقت (24) */
     right: 13px;
     width: 2px;
     background-color: var(--stone);
 }
 
+/* عناوين خانتي الوقت: نفس أعمدة .event عشان تجي فوقهم بالضبط */
+.events-head {
+    display: grid;
+    grid-template-columns: 28px 1fr 1fr 44px;
+    grid-template-areas: "bead start end remove";
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0.75;
+}
+
+.h-start {
+    grid-area: start;
+}
+
+.h-end {
+    grid-area: end;
+}
+
+/* كل حبّة سطرين: الحبّة والوقتين والحذف، وتحتهم العنوان */
 .event {
     position: relative;
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 28px 1fr 1fr 44px;
+    grid-template-areas:
+        "bead start end remove"
+        ". title title .";
     gap: 8px;
+    align-items: center;
 }
 
 .event::before {
     content: "";
+    grid-area: bead;
     width: 28px;
     height: 28px;
     flex-shrink: 0;
@@ -237,19 +286,31 @@ body.night {
     box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18);
 }
 
+/* تنطبق على خانتي الوقت: "يبدأ" و"لين" */
 .event input[type="time"] {
-    width: 96px;
+    width: 100%;
+    min-width: 0;
     padding: 0 8px;
     font-weight: 700;
     color: var(--rawasheen);
 }
 
+.event .start-time {
+    grid-area: start;
+}
+
+.event .end-time {
+    grid-area: end;
+}
+
 .event input[type="text"] {
-    flex: 1;
+    grid-area: title;
+    width: 100%;
     min-width: 0;
 }
 
 .remove {
+    grid-area: remove;
     width: 44px;
     height: 44px;
     border: none;

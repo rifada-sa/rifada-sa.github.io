@@ -109,12 +109,15 @@ function renderToday(num, now) {
     // نرتب نسخة من الفعاليات بالوقت (احتياط، النشر يرتبها أصلاً)
     const events = [...eventsOf(num)].sort(function (a, b) { return a.time.localeCompare(b.time); });
 
-    // الفعالية الحالية = آخر وحدة بدأ وقتها. (-1 يعني ولا وحدة بدأت)
+    // الحالية = آخر فعالية بدأت وما خلصت، والتالية = أول فعالية بدايتها بعد الحين.
+    // (-1 يعني ما فيه: ممكن يكون وقت فراغ بين فعاليتين)
     let current = -1;
+    let next = -1;
     events.forEach(function (ev, i) {
-        if (toMinutes(ev.time) <= minutes) current = i;
+        const start = toMinutes(ev.time);
+        if (start <= minutes && minutes < endOf(ev)) current = i;
+        if (next === -1 && start > minutes) next = i;
     });
-    const next = current + 1 < events.length ? current + 1 : -1; // اللي بعدها، لو فيه
 
     // نصوص الهيرو
     nameEl.hidden = true; // اسم الحملة صار داخل الهيرو
@@ -127,15 +130,35 @@ function renderToday(num, now) {
 
     let nextText = "";
     if (next !== -1) nextText = "التالي بعد " + durationText(toMinutes(events[next].time) - minutes);
+    else if (current !== -1) nextText = "ما بقى فعاليات بعدها";
     else if (events.length > 0) nextText = "ما بقى فعاليات اليوم";
     document.getElementById("now-next").textContent = nextText;
 
-    drawArc(events, current, minutes);
+    drawArc(events, current, next, minutes);
 
     // تحت الهيرو
     daysEl.appendChild(journey(num));
     daysEl.appendChild(masbaha(events, current, next, minutes));
     if (num !== "13") daysEl.appendChild(dayCard("بكرة: ", String(Number(num) + 1)));
+}
+
+// دقيقة نهاية الفعالية
+function endOf(ev) {
+    const start = toMinutes(ev.time);
+    if (!ev.end) return start + 60; // ما فيه "لين": تبقى ساعة وحدة
+    const end = toMinutes(ev.end);
+    return end > start ? end : 1440; // قبل البداية أو يساويها: بعد منتصف الليل (مثل المبيت)، فتبقى لين نهاية اليوم
+}
+
+// حالة الفعالية: "now" أو "past" أو "next" أو "later"
+// "past" بس لو بدأت، وما لها "لين" أو خلص وقتها. مثال: الوقوف بعرفة ١٢:٠٠–١٨:٢٠ وداخله
+// صلاة العصر ١٥:٣٠: وقت الصلاة تكون هي "الآن"، والوقوف يبقى "later" وما ينشطب لأنه ما خلص
+function statusOf(i, ev, current, next, minutes) {
+    if (i === current) return "now";
+    const started = toMinutes(ev.time) <= minutes;
+    if (started && (!ev.end || minutes >= endOf(ev))) return "past";
+    if (i === next) return "next";
+    return "later";
 }
 
 // الساعة الكبيرة: الأرقام كبيرة، و"ص/م" في span صغير جنبها
@@ -160,7 +183,7 @@ function showClock(now) {
 }
 
 // ٥) القوس: الشمس، الجزء اللي مضى، والحبّات
-function drawArc(events, current, minutes) {
+function drawArc(events, current, next, minutes) {
     // الشمس في مكان الوقت الحالي
     const sun = arcPoint(minutes);
     ["sun", "sun-glow"].forEach(function (id) {
@@ -181,14 +204,15 @@ function drawArc(events, current, minutes) {
     beads.innerHTML = "";
     events.forEach(function (ev, i) {
         const p = arcPoint(toMinutes(ev.time));
-        if (i < current) {
+        const status = statusOf(i, ev, current, next, minutes);
+        if (status === "past") {
             // مضت: زعفران مع ✓
             beads.appendChild(svgEl("circle", { cx: p.x, cy: p.y, r: 8, class: "bead-past" }));
             beads.appendChild(svgEl("path", {
                 d: "M" + (p.x - 4) + " " + p.y + " l2.7 2.9 l5.8 -6.2",
                 class: "bead-check"
             }));
-        } else if (i === current) {
+        } else if (status === "now") {
             // الحالية: خضراء ممتلئة، وحولها هالة
             beads.appendChild(svgEl("circle", { cx: p.x, cy: p.y, r: 14, class: "bead-halo" }));
             beads.appendChild(svgEl("circle", { cx: p.x, cy: p.y, r: 8, class: "bead-now" }));
@@ -266,15 +290,13 @@ function masbaha(events, current, next, minutes) {
     list.className = "masbaha-list";
     events.forEach(function (ev, i) {
         const li = document.createElement("li");
-        if (i < current) li.className = "past";
-        else if (i === current) li.className = "now";
-        else if (i === next) li.className = "next";
-        else li.className = "later";
+        const status = statusOf(i, ev, current, next, minutes);
+        li.className = status;
 
         // الحبّة (الدائرة على الخط)، واللي مضت فيها ✓
         const bead = document.createElement("span");
         bead.className = "bead";
-        if (i < current) {
+        if (status === "past") {
             const check = svgEl("svg", { viewBox: "0 0 24 24", width: 14, height: 14, "aria-hidden": "true" });
             check.appendChild(svgEl("path", { d: "M5 12.5l4.5 4.5L19 7.5" }));
             bead.appendChild(check);
@@ -287,12 +309,13 @@ function masbaha(events, current, next, minutes) {
         row.className = "ev-row";
         const time = document.createElement("span");
         time.className = "ev-time";
-        time.textContent = formatTime(ev.time);
+        // "٤:٠٠ م – ٦:٠٠ م" لو فيه نهاية، وإلا وقت البداية بس
+        time.textContent = formatTime(ev.time) + (ev.end ? " – " + formatTime(ev.end) : "");
         const title = document.createElement("span");
         title.className = "ev-title";
         title.textContent = ev.title;
 
-        if (i === current) {
+        if (status === "now") {
             // الآن: شارة فوق، والعنوان كبير تحتها، وشريط مشربية تحت
             const badge = document.createElement("span");
             badge.className = "now-badge";
@@ -301,7 +324,7 @@ function masbaha(events, current, next, minutes) {
             const strip = document.createElement("span");
             strip.className = "mashrabiya";
             body.append(row, title, strip);
-        } else if (i === next) {
+        } else if (status === "next") {
             // التالي: "التالي · بعد X" فوق، والعنوان تحت
             const label = document.createElement("span");
             label.className = "next-label";

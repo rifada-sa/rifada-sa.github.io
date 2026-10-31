@@ -18,6 +18,12 @@ const dashboard = document.getElementById("dashboard");
 const codeEl = document.getElementById("campaign-code");
 const form = document.getElementById("campaign-form");
 const startInput = document.getElementById("start-date");
+const supervisorInput = document.getElementById("supervisor-phone");
+const supervisorError = document.getElementById("supervisor-error");
+const emergencyInput = document.getElementById("emergency-phone");
+const emergencyError = document.getElementById("emergency-error");
+const minaInput = document.getElementById("mina-camp");
+const arafatInput = document.getElementById("arafat-camp");
 const dayTabs = document.getElementById("day-tabs");
 const dayLine = document.getElementById("day-line");
 const eventsList = document.getElementById("events");
@@ -157,6 +163,8 @@ onAuthStateChanged(auth, async function (user) {
         form.reset();
         days = emptyDays();
         showMsg(publishMsg, "");
+        supervisorError.textContent = ""; // form.reset() ما يمسح رسائل الخطأ
+        emergencyError.textContent = "";
         codeEl.textContent = "";
         return;
     }
@@ -177,6 +185,12 @@ onAuthStateChanged(auth, async function (user) {
 
     if (data.name) document.getElementById("campaign-name").value = data.name;
     if (data.startDate) startInput.value = data.startDate;
+    if (data.info) {
+        supervisorInput.value = data.info.supervisorPhone || "";
+        emergencyInput.value = data.info.emergencyPhone || "";
+        minaInput.value = data.info.minaCamp || "";
+        arafatInput.value = data.info.arafatCamp || "";
+    }
 
     // ننقل حبّات كل يوم من Firestore للمتغير days
     days = emptyDays();
@@ -234,8 +248,9 @@ dayTabs.addEventListener("click", function (e) {
 function collectEvents() {
     return [...eventsList.querySelectorAll(".event")].map(function (li) {
         return {
-            time: li.querySelector('input[type="time"]').value,
-            title: li.querySelector('input[type="text"]').value.trim()
+            time: li.querySelector(".start-time").value,
+            title: li.querySelector('input[type="text"]').value.trim(),
+            end: li.querySelector(".end-time").value
         };
     });
 }
@@ -254,7 +269,7 @@ function showDay(num) {
     });
     eventsList.innerHTML = "";
     days[num].forEach(function (ev) {
-        addEvent(ev.time, ev.title);
+        addEvent(ev.time, ev.title, ev.end || "");
     });
     if (eventsList.children.length === 0) addEvent();
     updateDayLine();
@@ -309,9 +324,10 @@ async function migrateOldDay(uid, data) {
 }
 
 // ١٠) إضافة حبّة للمسبحة
-function addEvent(time = "", title = "") {
+function addEvent(time = "", title = "", end = "") {
     const li = template.content.firstElementChild.cloneNode(true);
-    li.querySelector('input[type="time"]').value = time;
+    li.querySelector(".start-time").value = time;
+    li.querySelector(".end-time").value = end;
     li.querySelector('input[type="text"]').value = title;
     eventsList.appendChild(li);
 }
@@ -330,6 +346,17 @@ eventsList.addEventListener("click", function (e) {
 // ١٢) النشر: كل الأيام مرة وحدة
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    // نتأكد من أرقام الجوال أول، ولو فيه غلط نوقف النشر (والرابط يبقى مكانه)
+    const supervisorPhone = normalizePhone(supervisorInput.value);
+    const emergencyPhone = normalizePhone(emergencyInput.value);
+    const supervisorOk = checkPhone(supervisorPhone, supervisorError);
+    const emergencyOk = checkPhone(emergencyPhone, emergencyError);
+    if (!supervisorOk || !emergencyOk) {
+        (supervisorOk ? emergencyInput : supervisorInput).focus(); // نروح لأول رقم غلط
+        return;
+    }
+
     showMsg(publishMsg, "جاري النشر…");
     days[currentDay] = collectEvents(); // اليوم المعروض ممكن فيه تعديلات ما انحفظت
 
@@ -338,7 +365,13 @@ form.addEventListener("submit", async function (e) {
     DAYS.forEach(function (day) {
         const events = days[day.num]
             .filter(function (ev) { return ev.time && ev.title; })
-            .sort(function (a, b) { return a.time.localeCompare(b.time); });
+            .sort(function (a, b) { return a.time.localeCompare(b.time); })
+            .map(function (ev) {
+                // end اختياري: لو فاضي ما نحفظه أصلاً
+                const clean = { time: ev.time, title: ev.title };
+                if (ev.end) clean.end = ev.end;
+                return clean;
+            });
         daysToSave[day.num] = { events: events };
     });
 
@@ -348,8 +381,20 @@ form.addEventListener("submit", async function (e) {
             name: document.getElementById("campaign-name").value.trim(),
             startDate: startInput.value,
             days: daysToSave,
+            info: {
+                supervisorPhone: supervisorPhone,
+                emergencyPhone: emergencyPhone,
+                minaCamp: minaInput.value.trim(),
+                arafatCamp: arafatInput.value.trim()
+            },
             updatedAt: serverTimestamp()
         }, { merge: true });
+
+        // نكتب في الحقول النسخة النظيفة اللي انحفظت
+        supervisorInput.value = supervisorPhone;
+        emergencyInput.value = emergencyPhone;
+        minaInput.value = minaInput.value.trim();
+        arafatInput.value = arafatInput.value.trim();
 
         // نخلي اللي في الذاكرة مثل اللي انحفظ (مرتب وبدون ناقص)، ونعيد عرض اليوم الحالي
         DAYS.forEach(function (day) { days[day.num] = daysToSave[day.num].events; });
@@ -370,4 +415,26 @@ function showLink(uid, justPublished) {
     a.href = url;
     a.textContent = url;
     publishMsg.appendChild(a);
+}
+
+// ١٤) أرقام الحملة: تنظيف أرقام الجوال والتحقق منها
+// نحوّل الأرقام العربية والفارسية/الأردية لإنجليزية، ونشيل المسافات والشرطات
+// "٠٥٠ ١٢٣-٤٥٦٧" ← "0501234567"، و"۰۵۰ ۱۲۳-۴۵۶۷" ← "0501234567"
+function normalizePhone(text) {
+    return text
+        .replace(/[٠-٩]/g, function (digit) { return "٠١٢٣٤٥٦٧٨٩".indexOf(digit); })
+        .replace(/[۰-۹]/g, function (digit) { return "۰۱۲۳۴۵۶۷۸۹".indexOf(digit); })
+        .replace(/[\s-]/g, "");
+}
+
+// فاضي = صح (الحقل اختياري). الحملات من كل العالم، فما نقيّد بالسعودية
+function isValidPhone(text) {
+    return text === "" || /^\+?\d{7,15}$/.test(text);
+}
+
+// نكتب رسالة الخطأ تحت الحقل لو الرقم غلط، ونمسحها لو صح
+function checkPhone(phone, errorEl) {
+    const ok = isValidPhone(phone);
+    errorEl.textContent = ok ? "" : "الرقم غلط، اكتبه أرقام بس مثل 0501234567";
+    return ok;
 }
