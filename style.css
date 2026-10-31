@@ -638,6 +638,21 @@ input[type="tel"] {
     margin: 0;
 }
 
+/* "هذا مثال": فوق المثال لما ما فيه حملة */
+.demo-note {
+    margin: 16px 0 0;
+    padding: 12px 16px;
+    border: 1.5px solid var(--rawasheen);
+    border-radius: 14px;
+    background-color: var(--card);
+    font-weight: 700;
+    text-align: center;
+}
+
+.demo-note a {
+    color: var(--rawasheen);
+}
+
 /* شارة بدون نت تحت الهيرو */
 #offline-badge {
     width: fit-content;

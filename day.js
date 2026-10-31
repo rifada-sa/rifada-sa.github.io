@@ -24,6 +24,7 @@ let campaign;
 let shownAlert = ""; // نص التنبيه المعروض الحين
 let fromCache = false; // البيانات المعروضة من النسخة المحفوظة في الجوال؟
 let offlineTimer;
+let manifestReady = false; // manifest الحملة انولّد؟ (مرة وحدة بس)
 
 // لو فيه رقم حملة: نخفي المثال ونوري البرنامج الحقيقي
 if (campaignId) {
@@ -35,7 +36,10 @@ if (campaignId) {
     onSnapshot(doc(db, "campaigns", campaignId), { includeMetadataChanges: true }, function (snap) {
         campaign = snap.exists() ? snap.data() : null;
         fromCache = snap.metadata.fromCache;
-        if (snap.exists()) rememberCampaign(campaignId); // رابط غلط ما يمسح الحملة المحفوظة
+        if (snap.exists()) {
+            rememberCampaign(campaignId); // رابط غلط ما يمسح الحملة المحفوظة
+            if (params.get("c")) useCampaignManifest();
+        }
         render();
         updateOfflineBadge();
     }, function (error) {
@@ -68,6 +72,27 @@ function savedCampaign() {
         return localStorage.getItem("rifada-campaign");
     } catch (error) {
         return null;
+    }
+}
+
+// manifest لهالحملة: نفس manifest.json، بس start_url رابط الصفحة، عشان أيقونة الشاشة
+// الرئيسية تفتح برنامج الحملة مباشرة. نحطه كـ blob، وهو ما له مسار، فروابط الأيقونات كاملة.
+// لو صار أي خطأ نخلي manifest.json الأصلي
+async function useCampaignManifest() {
+    if (manifestReady) return;
+    manifestReady = true;
+    try {
+        const response = await fetch("manifest.json"); // بدون نت يجي من الكاش
+        const manifest = await response.json();
+        manifest.id = "rifada"; // نفس التطبيق لكل الحملات
+        manifest.start_url = location.href;
+        manifest.icons.forEach(function (icon) {
+            icon.src = new URL(icon.src, location.href).href;
+        });
+        const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+        document.querySelector('link[rel="manifest"]').href = URL.createObjectURL(blob);
+    } catch (error) {
+        // نكمل بالأصلي
     }
 }
 

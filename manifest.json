@@ -3,6 +3,8 @@
     "short_name": "رِفادة",
     "lang": "ar",
     "dir": "rtl",
+    "id": "rifada",
+    "start_url": "day.html",
     "display": "standalone",
     "background_color": "#F7F1E6",
     "theme_color": "#1F5C5A",
