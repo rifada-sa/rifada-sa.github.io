@@ -133,6 +133,18 @@
                 <button type="submit">انشر الأيام لحجّاجك</button>
                 <p id="publish-msg" role="status"></p>
             </form>
+
+            <!-- باب الرفادة: يظهر بعد أول نشر -->
+            <section id="door-card" hidden>
+                <h2>بابك لحجّاجك صار مفتوح 🌙</h2>
+                <p id="door-code" dir="ltr"></p>
+                <div class="qr-frame" id="door-qr"></div>
+                <div class="door-actions">
+                    <button type="button" class="btn btn-light" id="door-copy">انسخ الرابط</button>
+                    <a class="btn btn-light" id="door-whatsapp" target="_blank" rel="noopener">أرسل بالواتساب</a>
+                    <a class="btn btn-outline" id="door-print" target="_blank" rel="noopener">اطبع بطاقة المخيم</a>
+                </div>
+            </section>
         </div>
 
         <!-- قالب الحبّة: الجافاسكربت ينسخه كل ما نضغط "أضف" -->
@@ -149,6 +161,7 @@
         <p>صُنع بحب لضيوف الرحمن 🤍</p>
     </footer>
     <script src="script.js"></script>
+    <script src="vendor/qrcode.js"></script>
     <script type="module" src="campaign.js"></script>
 </body>
 

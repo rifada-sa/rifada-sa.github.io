@@ -6,6 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import { doc, getDoc, setDoc, writeBatch, deleteField, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { DAYS, getDay, dateOfDay, formatDate } from "./days.js";
+import { drawQr } from "./qr.js";
 
 const authBox = document.getElementById("auth-box");
 const tabSignup = document.getElementById("tab-signup");
@@ -17,6 +18,8 @@ const loginMsg = document.getElementById("login-msg");
 const dashboard = document.getElementById("dashboard");
 const codeEl = document.getElementById("campaign-code");
 const previewLink = document.getElementById("preview-link");
+const doorCard = document.getElementById("door-card");
+const doorCopy = document.getElementById("door-copy");
 const alertForm = document.getElementById("alert-form");
 const alertText = document.getElementById("alert-text");
 const alertError = document.getElementById("alert-error");
@@ -177,6 +180,7 @@ onAuthStateChanged(auth, async function (user) {
         emergencyError.textContent = "";
         codeEl.textContent = "";
         previewLink.hidden = true;
+        doorCard.hidden = true;
         alertForm.reset();
         alertError.textContent = "";
         alertUntil = 0;
@@ -228,6 +232,7 @@ onAuthStateChanged(auth, async function (user) {
     codeEl.textContent = "……";
     try {
         codeEl.textContent = await ensureCode(user.uid, data);
+        if (!doorCard.hidden) showDoor(user.uid); // الرمز وصل بعد البطاقة
     } catch (error) {
         codeEl.textContent = "تعذّر، حدّث الصفحة";
     }
@@ -455,7 +460,48 @@ function showLink(uid, justPublished) {
     // showLink تشتغل بس لو الحملة نشرت، فهنا نظهر "شوف كأنك حاج"
     previewLink.href = url;
     previewLink.hidden = false;
+    showDoor(uid);
 }
+
+// ١٦) باب الرفادة: الرمز والـ QR وطرق وصول الحجاج، يظهر بعد أول نشر
+let doorUrl = "";
+
+function showDoor(uid) {
+    doorUrl = new URL("day.html?c=" + uid, location.href).href;
+    const name = document.getElementById("campaign-name").value.trim();
+    const code = /^[A-Z2-9]{6}$/.test(codeEl.textContent) ? codeEl.textContent : ""; // "……" لين يوصل الرمز
+
+    document.getElementById("door-code").textContent = code;
+    drawQr(document.getElementById("door-qr"), doorUrl);
+    document.getElementById("door-whatsapp").href =
+        "https://wa.me/?text=" + encodeURIComponent(whatsappMessage(name, doorUrl, code));
+    document.getElementById("door-print").href = "print.html?c=" + uid;
+    doorCard.hidden = false;
+}
+
+// رسالة الواتساب. سطر الرمز يطلع بس لو الرمز موجود
+function whatsappMessage(name, url, code) {
+    let text = "حيّاكم الله يا ضيوف الرحمن 🤍\n"
+        + "هذا برنامج أيام الحج من " + name + "، ويتحدّث لحاله أول بأول:\n"
+        + url + "\n"
+        + "افتحوه الحين وفيه نت، واضغطوا «إضافة إلى الشاشة الرئيسية»، عشان يفتح معكم في منى وعرفات حتى لو النت ضعيف.";
+    if (code) text += "\nأو اكتبوا الرمز " + code + " في rifada-sa.github.io";
+    return text;
+}
+
+// انسخ الرابط: النص يتغير ثانيتين
+let copyTimer;
+
+doorCopy.addEventListener("click", async function () {
+    try {
+        await navigator.clipboard.writeText(doorUrl);
+        doorCopy.textContent = "انتسخ ✓";
+    } catch (error) {
+        doorCopy.textContent = "ما انتسخ، جرّب مرة ثانية";
+    }
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () { doorCopy.textContent = "انسخ الرابط"; }, 2000);
+});
 
 // ١٤) أرقام الحملة: تنظيف أرقام الجوال والتحقق منها
 // نحوّل الأرقام العربية والفارسية/الأردية لإنجليزية، ونشيل المسافات والشرطات

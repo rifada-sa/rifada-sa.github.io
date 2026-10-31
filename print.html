@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>بطاقة المخيم | رِفادة</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1F5C5A">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+
+<body>
+    <header class="hero page-hero">
+        <div class="hero-top">
+            <a class="logo" href="index.html">رِفادة</a>
+            <button id="theme-btn">🌙 ليل مزدلفة</button>
+        </div>
+    </header>
+    <main>
+        <p id="print-msg" role="status">جاري التحميل…</p>
+        <button type="button" id="print-btn" hidden>اطبع</button>
+
+        <div id="print-sheet" hidden>
+            <!-- بطاقة الحجاج -->
+            <section class="print-card">
+                <h2>امسح وشوف يومك في المشاعر</h2>
+                <p class="print-name"></p>
+                <div class="qr-frame" id="qr-day"></div>
+                <p class="print-code" id="print-code" dir="ltr"></p>
+            </section>
+
+            <!-- بطاقة التايه -->
+            <section class="print-card">
+                <h2>تايه؟ امسح هنا · Lost? Scan here</h2>
+                <p class="print-name"></p>
+                <div class="qr-frame" id="qr-lost"></div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>صُنع بحب لضيوف الرحمن 🤍</p>
+    </footer>
+    <script src="script.js"></script>
+    <script src="vendor/qrcode.js"></script>
+    <script type="module" src="print.js"></script>
+</body>
+
+</html>

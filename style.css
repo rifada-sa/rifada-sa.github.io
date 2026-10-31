@@ -620,6 +620,167 @@ input[type="tel"] {
     opacity: 0.75;
 }
 
+/* إطار الـ QR: أبيض دايماً حتى بالليل، وإلا الكاميرات ما تقراه */
+.qr-frame {
+    box-sizing: border-box;
+    width: 200px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+.qr-frame svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* باب الرفادة في لوحة الحملة */
+#door-card {
+    position: relative;
+    margin-top: 38px;
+    border: none;
+    border-radius: 0 0 20px 20px;
+    background-color: var(--wood);
+    color: var(--on-wood);
+    text-align: center;
+}
+
+/* صف الأقواس فوق البطاقة */
+#door-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -14px;
+    height: 14px;
+    background:
+        radial-gradient(circle at 50% 7px, var(--wood) 6.5px, transparent 7px) 0 0 / 18px 14px,
+        linear-gradient(90deg, transparent 2.5px, var(--wood) 2.5px 15.5px, transparent 15.5px) 0 7px / 18px 7px repeat-x;
+}
+
+#door-card h2 {
+    margin: 0;
+    color: var(--on-wood);
+}
+
+#door-code {
+    margin: 8px 0 12px;
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 4px;
+}
+
+.door-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.door-actions .btn {
+    flex: none;
+    box-sizing: border-box;
+    width: 100%;
+    cursor: pointer;
+}
+
+.door-actions button.btn {
+    border: none;
+}
+
+/* صفحة الطباعة */
+#print-msg {
+    margin-top: 16px;
+    text-align: center;
+}
+
+#print-btn {
+    display: block;
+    width: 100%;
+    height: 52px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.print-card {
+    text-align: center;
+}
+
+.print-card h2 {
+    margin: 0;
+}
+
+.print-name {
+    margin: 4px 0 12px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.print-card .qr-frame {
+    width: 260px;
+}
+
+.print-code {
+    margin: 8px 0 0;
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+/* الطباعة: البطاقتين بس، أبيض وأسود، على صفحة A4 وحدة */
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+@media print {
+    header,
+    footer,
+    #print-btn,
+    #print-msg {
+        display: none !important;
+    }
+
+    body {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #000000;
+    }
+
+    .print-card {
+        margin: 0 0 8mm;
+        padding: 6mm;
+        border: 1px solid #000000;
+        background-color: #FFFFFF;
+        color: #000000;
+        break-inside: avoid; /* البطاقة ما تنقسم بين صفحتين */
+    }
+
+    .print-card h2 {
+        color: #000000;
+    }
+
+    .print-card .qr-frame {
+        width: 62mm;
+        padding: 0;
+    }
+}
+
 /* شريط التنبيه العاجل: أول شي في الصفحة */
 #alert-banner {
     margin-top: 16px;
