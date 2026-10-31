@@ -962,6 +962,16 @@ body.big .arc-now {
     bottom: 0;
 }
 
+/* بطاقة "التالي": "التالي · بعد X" سطر، والوقت سطر تحته */
+body.big .next .ev-row {
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+body.big .next-label {
+    flex-basis: 100%;
+}
+
 /* شارة بدون نت تحت الهيرو */
 #offline-badge {
     width: fit-content;
@@ -1307,7 +1317,7 @@ body.big .arc-now {
 
 .past .ev-title {
     text-decoration: line-through;
-    opacity: 0.6;
+    opacity: 0.7; /* باهت، بس التباين ٥٫١٩ بالنهار و٧٫٨٠ بالليل */
 }
 
 /* الآن: بطاقة بنية */
