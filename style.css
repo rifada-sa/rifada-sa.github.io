@@ -261,6 +261,10 @@ input[type="tel"] {
     width: 100%;
     min-width: 0;
     padding: 0 8px;
+}
+
+/* #campaign-form هنا عشان يغلب font و color حق "#campaign-form input" */
+#campaign-form .event input[type="time"] {
     font-weight: 700;
     color: var(--rawasheen);
 }
