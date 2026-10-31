@@ -34,6 +34,8 @@ const arafatInput = document.getElementById("arafat-camp");
 const dayTabs = document.getElementById("day-tabs");
 const dayLine = document.getElementById("day-line");
 const eventsList = document.getElementById("events");
+const addEventBtn = document.getElementById("add-event");
+const eventLimit = document.getElementById("event-limit");
 const template = document.getElementById("event-template");
 const publishMsg = document.getElementById("publish-msg");
 
@@ -351,9 +353,20 @@ function addEvent(time = "", title = "", end = "") {
     li.querySelector(".end-time").value = end;
     li.querySelector('input[type="text"]').value = title;
     eventsList.appendChild(li);
+    updateEventLimit();
 }
 
-document.getElementById("add-event").addEventListener("click", function () {
+// الحد ٤٠ حبّة لليوم (نفس حد القواعد). نعدّ حبّات الشاشة، فالفحص يمشي لكل يوم لحاله:
+// showDay ترسم حبّات اليوم بـ addEvent، فبتبديل اليوم يتحدّث الزر لحاله
+const MAX_EVENTS = 40;
+
+function updateEventLimit() {
+    const full = eventsList.children.length >= MAX_EVENTS;
+    addEventBtn.disabled = full;
+    eventLimit.hidden = !full;
+}
+
+addEventBtn.addEventListener("click", function () {
     addEvent();
 });
 
@@ -361,6 +374,7 @@ document.getElementById("add-event").addEventListener("click", function () {
 eventsList.addEventListener("click", function (e) {
     if (e.target.closest(".remove")) {
         e.target.closest(".event").remove();
+        updateEventLimit();
     }
 });
 

@@ -35,7 +35,7 @@
             <!-- حساب جديد -->
             <form id="signup-form" class="auth-form">
                 <label for="signup-name">اسم الحملة</label>
-                <input type="text" id="signup-name" placeholder="مثلاً: حملة النور" required>
+                <input type="text" id="signup-name" maxlength="80" placeholder="مثلاً: حملة النور" required>
 
                 <label for="signup-email">الإيميل</label>
                 <input type="email" id="signup-email" autocomplete="email" required>
@@ -94,7 +94,7 @@
 
             <form id="campaign-form">
                 <label for="campaign-name">اسم الحملة</label>
-                <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>
+                <input type="text" id="campaign-name" maxlength="80" placeholder="مثلاً: حملة النور" required>
 
                 <label for="start-date">تاريخ يوم التروية (٨ ذو الحجة)</label>
                 <input type="date" id="start-date">
@@ -125,6 +125,7 @@
                 <div class="events-head" aria-hidden="true"><span class="h-start">يبدأ</span><span class="h-end">لين (اختياري)</span></div>
                 <ol id="events"></ol>
                 <button type="button" id="add-event">+ أضف حبّة للمسبحة</button>
+                <p class="field-hint" id="event-limit" role="status" hidden>وصلت الحد: ٤٠ حبّة لليوم</p>
 
                 <button type="submit">انشر الأيام لحجّاجك</button>
                 <p id="publish-msg" role="status"></p>
@@ -136,7 +137,7 @@
             <li class="event">
                 <input type="time" class="start-time" aria-label="يبدأ">
                 <input type="time" class="end-time" aria-label="لين (اختياري)">
-                <input type="text" aria-label="الفعالية" placeholder="مثلاً: الانطلاق إلى منى">
+                <input type="text" aria-label="الفعالية" maxlength="80" placeholder="مثلاً: الانطلاق إلى منى">
                 <button type="button" class="remove" aria-label="حذف الفعالية">✕</button>
             </li>
         </template>

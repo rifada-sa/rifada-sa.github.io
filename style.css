@@ -382,6 +382,11 @@ input[type="tel"] {
     cursor: pointer;
 }
 
+#add-event:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 #campaign-form button[type="submit"] {
     margin-top: 16px;
     height: 56px;
