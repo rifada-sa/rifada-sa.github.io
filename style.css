@@ -10,6 +10,8 @@
     --on-saffron: #3B2418; /* النص والعلامات فوق الزعفران: غامق دايماً */
     --hero-bg: #1F5C5A;   /* خلفية الهيرو الأخضر */
     --on-hero: #F7F1E6;   /* النص والرسومات فوق الهيرو */
+    --wood: #3B2418;      /* خشب الباب: خلفية، تبقى غامقة في الليل */
+    --on-wood: #F7F1E6;   /* النص والرسومات فوق الخشب */
 }
 
 /* أي عنصر فيه hidden يختفي، حتى لو له display في مكان ثاني */
@@ -147,6 +149,8 @@ body.night {
     --on-saffron: #121829;
     --hero-bg: #1A4A48;
     --on-hero: #F3EBDD;
+    --wood: #3A2A20;
+    --on-wood: #F3EBDD;
 }
 
 /* زر الوضع الليلي */
@@ -338,8 +342,8 @@ input[type="tel"] {
     height: 56px;
     border: none;
     border-radius: 16px;
-    background-color: var(--date);
-    color: var(--ihram);
+    background-color: var(--wood);
+    color: var(--on-wood);
     font-family: "Reem Kufi", sans-serif;
     font-size: 19px;
     font-weight: 700;
@@ -885,8 +889,8 @@ input[type="tel"] {
 .now .ev-body {
     position: relative;
     overflow: hidden;
-    background-color: var(--date);
-    color: var(--ihram);
+    background-color: var(--wood);
+    color: var(--on-wood);
     border-radius: 18px;
     padding: 16px 18px 24px;
 }
@@ -921,8 +925,8 @@ input[type="tel"] {
     bottom: 0;
     height: 10px;
     background:
-        repeating-linear-gradient(45deg, var(--ihram) 0 1.5px, transparent 1.5px 8px),
-        repeating-linear-gradient(-45deg, var(--ihram) 0 1.5px, transparent 1.5px 8px);
+        repeating-linear-gradient(45deg, var(--on-wood) 0 1.5px, transparent 1.5px 8px),
+        repeating-linear-gradient(-45deg, var(--on-wood) 0 1.5px, transparent 1.5px 8px);
     opacity: 0.3;
 }
 
@@ -1126,15 +1130,15 @@ input[type="tel"] {
 
 /* بطاقة الحملة: خشب الروشان مع نقش المشربية */
 .campaign {
-    background-color: var(--date);
-    color: var(--ihram);
+    background-color: var(--wood);
+    color: var(--on-wood);
     background-image:
         repeating-linear-gradient(45deg, rgba(247, 241, 230, 0.12) 0 1.5px, transparent 1.5px 9px),
         repeating-linear-gradient(-45deg, rgba(247, 241, 230, 0.12) 0 1.5px, transparent 1.5px 9px);
 }
 
 .campaign h2 {
-    color: var(--ihram);
+    color: var(--on-wood);
 }
 
 .btn-row {
@@ -1156,13 +1160,13 @@ input[type="tel"] {
 }
 
 .btn-light {
-    background-color: var(--ihram);
-    color: var(--date);
+    background-color: var(--on-wood);
+    color: var(--wood);
 }
 
 .btn-outline {
-    border: 1.5px solid var(--ihram);
-    color: var(--ihram);
+    border: 1.5px solid var(--on-wood);
+    color: var(--on-wood);
 }
 
 .btn-outline-green {
