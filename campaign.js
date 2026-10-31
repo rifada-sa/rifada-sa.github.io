@@ -529,7 +529,7 @@ alertForm.addEventListener("submit", async function (e) {
     }
     alertError.textContent = "";
     const until = alertEnd(alertDuration.value);
-    startAlertWork("جاري الإرسال…", "ما فيه نت. التنبيه بيوصل لحجّاجك أول ما يرجع النت — خلّ الصفحة مفتوحة");
+    startAlertWork("جاري الإرسال…", "ما فيه نت. التنبيه محفوظ، وبينرسل أول ما يرجع النت وتكون هالصفحة مفتوحة");
     try {
         await setDoc(doc(db, "campaigns", auth.currentUser.uid), {
             alert: { text: text, until: until }
@@ -545,7 +545,7 @@ alertForm.addEventListener("submit", async function (e) {
 // المسح: نحذف alert من المستند
 document.getElementById("alert-clear").addEventListener("click", async function () {
     alertError.textContent = "";
-    startAlertWork("جاري المسح…", "ما فيه نت. المسح بيوصل لحجّاجك أول ما يرجع النت — خلّ الصفحة مفتوحة");
+    startAlertWork("جاري المسح…", "ما فيه نت. المسح محفوظ، وبينرسل أول ما يرجع النت وتكون هالصفحة مفتوحة");
     try {
         await setDoc(doc(db, "campaigns", auth.currentUser.uid), {
             alert: deleteField()

@@ -1,3 +1,18 @@
+// نسجّل الـ Service Worker عشان الموقع يفتح بدون نت (هذا الملف في كل الصفحات)
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(function () {
+        // لو فشل، الموقع يشتغل عادي بس بدون نسخة محفوظة
+    });
+
+    // أول زيارة: الخطوط تتحمّل قبل ما يبدأ الـ Service Worker، فما يشوفها.
+    // أول ما يمسك الصفحة نطلبها مرة ثانية عشان تنحفظ، ويبقى خط الموقع بدون نت
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+        performance.getEntriesByType("resource").forEach(function (entry) {
+            if (entry.name.includes("fonts.g")) fetch(entry.name).catch(function () {});
+        });
+    });
+}
+
 const btn = document.getElementById("theme-btn");
 
 // أول ما تفتح الصفحة: وش كان آخر اختيار؟

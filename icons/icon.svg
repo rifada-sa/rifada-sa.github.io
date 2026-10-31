@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <defs>
+        <!-- الشبك المائل داخل النافذة -->
+        <pattern id="lattice" width="26" height="26" patternUnits="userSpaceOnUse">
+            <path d="M0 0L26 26M26 0L0 26" stroke="#7CC1B6" stroke-width="4"/>
+        </pattern>
+    </defs>
+    <!-- الخلفية الخضراء -->
+    <rect width="512" height="512" fill="#1F5C5A"/>
+    <!-- الرسمة كلها داخل ٦٠٪ الوسط (من ١٠٢ إلى ٤١٠) عشان maskable -->
+    <!-- نافذة الروشان: قوس فوق ومستطيل تحت -->
+    <path d="M176 352V236a80 80 0 0 1 160 0V352Z" fill="url(#lattice)" stroke="#F7F1E6" stroke-width="14" stroke-linejoin="round"/>
+    <!-- العتبة -->
+    <rect x="150" y="352" width="212" height="24" rx="6" fill="#F7F1E6"/>
+    <!-- الشمس -->
+    <circle cx="364" cy="148" r="30" fill="#E0A526"/>
+</svg>

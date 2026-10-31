@@ -6,6 +6,19 @@ const codeForm = document.getElementById("code-form");
 const codeInput = document.getElementById("code-input");
 const codeMsg = document.getElementById("code-msg");
 
+// لو فيه حملة محفوظة من قبل: زر واضح يفتح برنامجها، بدون تحويل تلقائي
+let savedCampaign = null;
+try {
+    savedCampaign = localStorage.getItem("rifada-campaign");
+} catch (error) {
+    // المتصفح يمنع التخزين (مثلاً التصفح الخفي): نكمل بدون الزر
+}
+if (savedCampaign) {
+    const myCampaign = document.getElementById("my-campaign");
+    myCampaign.href = "day.html?c=" + encodeURIComponent(savedCampaign);
+    myCampaign.hidden = false;
+}
+
 codeForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     codeMsg.textContent = "";

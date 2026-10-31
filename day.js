@@ -9,8 +9,9 @@ const SVG_NS = "http://www.w3.org/2000/svg"; // عناصر SVG تحتاج هذا
 const PHONE_PATTERN = /^\+?\d{7,15}$/; // نفس شرط لوحة الحملة
 
 // ١) نقرأ رقم الحملة من الرابط: day.html?c=xxxx
+// ولو ما فيه ?c= نستخدم آخر حملة محفوظة في الجوال
 const params = new URLSearchParams(location.search);
-const campaignId = params.get("c");
+const campaignId = params.get("c") || savedCampaign();
 // للتجربة بس: day.html?c=xxxx&t=10:30 يخلي الصفحة تتصرف كأن الساعة ١٠:٣٠
 const testTime = params.get("t");
 
@@ -21,6 +22,8 @@ const todayHero = document.getElementById("today-hero");
 // آخر بيانات وصلت: undefined = لسا ما وصل شي، null = ما لقينا الحملة
 let campaign;
 let shownAlert = ""; // نص التنبيه المعروض الحين
+let fromCache = false; // البيانات المعروضة من النسخة المحفوظة في الجوال؟
+let offlineTimer;
 
 // لو فيه رقم حملة: نخفي المثال ونوري البرنامج الحقيقي
 if (campaignId) {
@@ -28,12 +31,20 @@ if (campaignId) {
     document.getElementById("live").hidden = false;
 
     // ٢) onSnapshot: يجيب البرنامج، ويرجع يشتغل كل ما الحملة عدّلت
-    onSnapshot(doc(db, "campaigns", campaignId), function (snap) {
+    // includeMetadataChanges: يشتغل كمان لما تتغير حالة النت، عشان الشارة تتحدّث
+    onSnapshot(doc(db, "campaigns", campaignId), { includeMetadataChanges: true }, function (snap) {
         campaign = snap.exists() ? snap.data() : null;
+        fromCache = snap.metadata.fromCache;
+        if (snap.exists()) rememberCampaign(campaignId); // رابط غلط ما يمسح الحملة المحفوظة
         render();
+        updateOfflineBadge();
     }, function (error) {
         showMessage("تعذّر تحميل البرنامج، تأكد من النت");
     });
+
+    window.addEventListener("online", updateOfflineBadge);
+    window.addEventListener("offline", updateOfflineBadge);
+    updateOfflineBadge();
 
     // نعيد الرسم كل دقيقة (الشمس والساعة والحبّات تمشي، وبعد منتصف الليل يتغير "اليوم").
     // أول مرة ننتظر لين بداية الدقيقة الجاية، عشان الساعة الكبيرة تتغير بوقتها بالضبط
@@ -41,6 +52,39 @@ if (campaignId) {
         render();
         setInterval(render, MINUTE_MS);
     }, MINUTE_MS - (Date.now() % MINUTE_MS));
+}
+
+// رقم الحملة في الجوال (التخزين ممكن يكون ممنوع، مثلاً في التصفح الخفي)
+function rememberCampaign(id) {
+    try {
+        localStorage.setItem("rifada-campaign", id);
+    } catch (error) {
+        // نكمل بدون حفظ
+    }
+}
+
+function savedCampaign() {
+    try {
+        return localStorage.getItem("rifada-campaign");
+    } catch (error) {
+        return null;
+    }
+}
+
+// شارة بدون نت. أول رد من Firestore دايماً من النسخة المحفوظة، حتى والنت شغّال،
+// فننتظر شوي قبل ما نظهرها عشان ما تومض كل مرة تنفتح الصفحة
+function updateOfflineBadge() {
+    const badge = document.getElementById("offline-badge");
+    clearTimeout(offlineTimer);
+    if (!campaign) {
+        badge.hidden = true; // ما عندنا نسخة نعرضها أصلاً
+    } else if (!navigator.onLine) {
+        badge.hidden = false;
+    } else if (!fromCache) {
+        badge.hidden = true;
+    } else {
+        offlineTimer = setTimeout(function () { badge.hidden = false; }, 2500);
+    }
 }
 
 // الوقت الحين (أو وقت التجربة لو فيه &t= في الرابط)
@@ -61,7 +105,8 @@ function render() {
     nameEl.hidden = false;
     if (campaign === null) {
         nameEl.textContent = "";
-        showMessage("ما لقينا برنامج لهالحملة");
+        // بدون نت وما عندنا نسخة: ما نقدر نقول إن الحملة غير موجودة
+        showMessage(fromCache ? "تعذّر تحميل البرنامج، تأكد من النت" : "ما لقينا برنامج لهالحملة");
         return;
     }
 

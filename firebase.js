@@ -1,6 +1,6 @@
 // الاتصال بـ Firebase (مشترك بين صفحة الحملة وصفحة الحاج)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 // إعدادات مشروع رِفادة (مو سرية، الحماية في قواعد Firestore)
@@ -15,5 +15,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);   // قاعدة البيانات
+// قاعدة البيانات، مع نسخة محفوظة في الجوال: البرنامج يفتح بدون نت، والكتابة تنتظر لين يرجع
+export const db = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+});
 export const auth = getAuth(app);      // تسجيل الدخول

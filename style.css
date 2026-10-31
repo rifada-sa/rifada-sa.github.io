@@ -638,6 +638,22 @@ input[type="tel"] {
     margin: 0;
 }
 
+/* شارة بدون نت تحت الهيرو */
+#offline-badge {
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 12px auto 0;
+    padding: 4px 14px;
+    border: 1.5px solid var(--rawasheen);
+    border-radius: 999px;
+    background-color: var(--card);
+    color: var(--rawasheen);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+}
+
 /* بطاقة "مخيمي" (شكلها من section) */
 .camp-line {
     margin: 0;
@@ -1262,6 +1278,22 @@ input[type="tel"] {
 .btn-outline-green {
     border: 1.5px solid var(--rawasheen);
     color: var(--rawasheen);
+}
+
+/* "افتح برنامج حملتي": يطلع مكان بطاقة "أنا حاج" فوق الهيرو، والبطاقة تنزل تحته */
+.btn-mine {
+    position: relative;
+    height: 56px;
+    margin-top: -56px;
+    background-color: var(--wood);
+    color: var(--on-wood);
+    font-family: "Tajawal", sans-serif;
+    font-size: 18px;
+    box-shadow: 0 18px 40px -18px rgba(59, 36, 24, 0.35);
+}
+
+#my-campaign:not([hidden]) + .pilgrim {
+    margin-top: 12px;
 }
 
 .free {

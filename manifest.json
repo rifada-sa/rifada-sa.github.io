@@ -1,0 +1,13 @@
+{
+    "name": "رِفادة",
+    "short_name": "رِفادة",
+    "lang": "ar",
+    "dir": "rtl",
+    "display": "standalone",
+    "background_color": "#F7F1E6",
+    "theme_color": "#1F5C5A",
+    "icons": [
+        { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    ]
+}
