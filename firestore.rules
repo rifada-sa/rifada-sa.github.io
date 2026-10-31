@@ -1,0 +1,62 @@
+// قواعد Firestore لرِفادة (نسخة للتوثيق: الفعّال هو اللي في Firebase Console)
+//
+// signedIn: المستخدم مسجّل دخول.
+// str: القيمة نص وطوله ما يتعدى max.
+// dayOk: يوم واحد: لو موجود، يكون فيه events بس، وقائمة ما تتعدى ٤٠ حبّة.
+// daysOk: مفاتيح days هي أيام الحج الستة بس (٨ إلى ١٣)، وكل يوم سليم.
+// infoOk: أرقام الحملة: الحقول الأربعة بس، والجوال ١٦ حرف كحد أقصى، والمخيم ٣٠.
+// alertOk: التنبيه العاجل: text بحد ١٦٠ حرف، و until رقم صحيح بالملّي ثانية.
+// campaignOk: حقول مستند الحملة المسموحة وحجمها (dayName و date و events حقول قديمة قبل التحويل).
+// campaigns: أي أحد يقرأ مستند حملة برقمها، وما أحد يقدر يسرد كل الحملات، والكتابة لصاحب الحساب بس وبشكل سليم.
+// codes: أي أحد يقرأ رمز واحد، والسرد ممنوع، والإنشاء لصاحب الحساب برمز صحيح (بدون I و O و 0 و 1).
+// codes (تعديل وحذف): ممنوع، عشان الرمز المأخوذ يترفض وما أحد يسرق رمز غيره.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function str(v, max) { return v is string && v.size() <= max; }
+    function dayOk(days, k) {
+      return !(k in days) || (days[k] is map && days[k].keys().hasOnly(['events'])
+        && days[k].events is list && days[k].events.size() <= 40);
+    }
+    function daysOk(days) {
+      return days is map && days.keys().hasOnly(['8','9','10','11','12','13'])
+        && dayOk(days,'8') && dayOk(days,'9') && dayOk(days,'10')
+        && dayOk(days,'11') && dayOk(days,'12') && dayOk(days,'13');
+    }
+    function infoOk(i) {
+      return i is map && i.keys().hasOnly(['supervisorPhone','emergencyPhone','minaCamp','arafatCamp'])
+        && (!('supervisorPhone' in i) || str(i.supervisorPhone, 16))
+        && (!('emergencyPhone' in i) || str(i.emergencyPhone, 16))
+        && (!('minaCamp' in i) || str(i.minaCamp, 30))
+        && (!('arafatCamp' in i) || str(i.arafatCamp, 30));
+    }
+    function alertOk(a) {
+      return a is map && a.keys().hasOnly(['text','until']) && str(a.text, 160) && a.until is int;
+    }
+    function campaignOk(d) {
+      return d.keys().hasOnly(['name','code','startDate','days','info','alert','updatedAt','dayName','date','events'])
+        && (!('name' in d) || str(d.name, 80))
+        && (!('code' in d) || (d.code is string && d.code.size() == 6))
+        && (!('startDate' in d) || str(d.startDate, 10))
+        && (!('days' in d) || daysOk(d.days))
+        && (!('info' in d) || infoOk(d.info))
+        && (!('alert' in d) || alertOk(d.alert));
+    }
+    match /campaigns/{uid} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if signedIn() && request.auth.uid == uid && campaignOk(request.resource.data);
+      allow delete: if signedIn() && request.auth.uid == uid;
+    }
+    match /codes/{code} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn() && code.matches('^[A-HJ-NP-Z2-9]{6}$')
+        && request.resource.data.keys().hasOnly(['campaignId'])
+        && request.resource.data.campaignId == request.auth.uid;
+      allow update, delete: if false;
+    }
+  }
+}
