@@ -185,7 +185,7 @@ onAuthStateChanged(auth, async function (user) {
             const stored = data.days[day.num];
             if (stored && stored.events) days[day.num] = stored.events;
         });
-        showLink(user.uid); // نشرت قبل
+        showLink(user.uid, false); // نشرت قبل
     }
     // نفتح على أول يوم فيه فعاليات، ولو ما فيه شي نفتح على ٨
     const firstDay = DAYS.find(function (day) { return days[day.num].length > 0; });
@@ -354,16 +354,18 @@ form.addEventListener("submit", async function (e) {
         // نخلي اللي في الذاكرة مثل اللي انحفظ (مرتب وبدون ناقص)، ونعيد عرض اليوم الحالي
         DAYS.forEach(function (day) { days[day.num] = daysToSave[day.num].events; });
         showDay(currentDay);
-        showLink(auth.currentUser.uid);
+        showLink(auth.currentUser.uid, true);
     } catch (error) {
         showMsg(publishMsg, "ما قدرنا ننشر، جرّب مرة ثانية");
     }
 });
 
 // ١٣) الرابط الثابت للحجاج
-function showLink(uid) {
+// justPublished: true بعد النشر، وfalse لما نعرض الرابط عند الدخول بس
+function showLink(uid, justPublished) {
     const url = new URL("day.html?c=" + uid, location.href).href;
-    showMsg(publishMsg, "✓ وصل البرنامج لحجّاجك. رابط حملتك الثابت: ", true);
+    const text = justPublished ? "✓ وصل البرنامج لحجّاجك. رابط حملتك الثابت: " : "رابط حملتك الثابت: ";
+    showMsg(publishMsg, text, true);
     const a = document.createElement("a");
     a.href = url;
     a.textContent = url;

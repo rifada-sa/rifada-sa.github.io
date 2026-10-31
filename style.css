@@ -8,6 +8,8 @@
     --alert: #9E2B25;     /* أحمر: للتنبيه بس */
     --card: #FFFCF6;
     --on-saffron: #3B2418; /* النص والعلامات فوق الزعفران: غامق دايماً */
+    --hero-bg: #1F5C5A;   /* خلفية الهيرو الأخضر */
+    --on-hero: #F7F1E6;   /* النص والرسومات فوق الهيرو */
 }
 
 /* أي عنصر فيه hidden يختفي، حتى لو له display في مكان ثاني */
@@ -143,6 +145,8 @@ body.night {
     --rawasheen: #7CC1B6;
     --stone: #2A3350;
     --on-saffron: #121829;
+    --hero-bg: #1A4A48;
+    --on-hero: #F3EBDD;
 }
 
 /* زر الوضع الليلي */
@@ -162,35 +166,6 @@ body.night {
 
 /* ===== لوحة الحملة ===== */
 
-/* الهيدر الأخضر */
-.campaign-hero {
-    position: relative;
-    background-color: var(--rawasheen);
-    color: var(--ihram);
-    border: none;
-    border-radius: 20px 20px 0 0;
-    padding: 32px 24px 44px;
-    margin-bottom: 0;
-}
-
-.campaign-hero h1 {
-    color: var(--ihram);
-    margin: 0 0 8px;
-}
-
-/* صف الأقواس تحت الهيدر */
-.campaign-hero::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 14px;
-    background:
-        radial-gradient(circle at 50% 7px, var(--card) 6.5px, transparent 7px) 0 0 / 18px 14px,
-        linear-gradient(90deg, transparent 2.5px, var(--card) 2.5px 15.5px, transparent 15.5px) 0 7px / 18px 7px repeat-x;
-}
-
 /* النموذج */
 #campaign-form {
     display: flex;
@@ -198,7 +173,7 @@ body.night {
     gap: 8px;
     background-color: var(--card);
     padding: 24px;
-    border-radius: 0 0 20px 20px;
+    border-radius: 20px;
 }
 
 #campaign-form label {
@@ -505,6 +480,11 @@ body.night {
     opacity: 0.75;
 }
 
+.hero.page-hero {
+    padding-bottom: 40px;
+    margin-bottom: 24px;
+}
+
 /* ----- هيرو صفحة الحاج (يستخدم .hero من الرئيسية) ----- */
 /* .hero.day-hero أقوى من .hero لحاله، فيغلب قواعد الرئيسية اللي تحت في الملف */
 .hero.day-hero {
@@ -548,7 +528,7 @@ body.night {
 
 .arc-track {
     fill: none;
-    stroke: var(--ihram);
+    stroke: var(--on-hero);
     stroke-width: 2;
     stroke-dasharray: 3 7;
     stroke-linecap: round;
@@ -583,13 +563,13 @@ body.night {
 /* الحالية: ممتلئة مع هالة، والجاية: إطار بس */
 .bead-now,
 .bead-next {
-    fill: var(--rawasheen);
-    stroke: var(--ihram);
+    fill: var(--hero-bg);
+    stroke: var(--on-hero);
     stroke-width: 2.5;
 }
 
 .bead-halo {
-    fill: var(--ihram);
+    fill: var(--on-hero);
     opacity: 0.3;
 }
 
@@ -641,9 +621,9 @@ body.night {
 }
 
 .tent {
-    fill: var(--ihram);
+    fill: var(--on-hero);
     fill-opacity: 0.16;
-    stroke: var(--rawasheen);
+    stroke: var(--hero-bg);
     stroke-width: 1.5;
     stroke-linejoin: round;
 }
@@ -888,8 +868,8 @@ body.night {
 /* الهيدر الأخضر */
 .hero {
     position: relative;
-    background-color: var(--rawasheen);
-    color: var(--ihram);
+    background-color: var(--hero-bg);
+    color: var(--on-hero);
     border-radius: 24px;
     padding: 20px 20px 80px;
 }
@@ -922,7 +902,7 @@ body.night {
 .hero #theme-btn {
     position: static;
     background-color: transparent;
-    color: var(--ihram);
+    color: var(--on-hero);
     border: 1.5px solid currentColor;
 }
 
@@ -938,7 +918,7 @@ body.night {
 }
 
 .hero h1 {
-    color: var(--ihram);
+    color: var(--on-hero);
     font-size: 38px;
     line-height: 1.2;
     margin: 6px 0 10px;

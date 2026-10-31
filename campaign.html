@@ -12,12 +12,18 @@
 </head>
 
 <body>
-    <header>
-        <h1>رِفادة</h1>
-        <nav>
-            <a href="index.html">الرئيسية</a>
-        </nav>
-        <button id="theme-btn">🌙 ليل مزدلفة</button>
+    <!-- الهيدر الأخضر -->
+    <header class="hero page-hero">
+        <div class="hero-top">
+            <a class="logo" href="index.html">رِفادة</a>
+            <button id="theme-btn">🌙 ليل مزدلفة</button>
+        </div>
+        <svg aria-hidden="true" width="96" height="178" viewBox="0 0 96 178" class="roshan"><defs><pattern id="rl" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0L8 8M8 0L0 8" stroke="rgba(247,241,230,0.32)" stroke-width="1.2"></path></pattern></defs><path d="M4 4H92V12H4Z" fill="rgba(247,241,230,0.22)"></path><path d="M8 150V52a40 40 0 0 1 80 0V150Z" fill="rgba(247,241,230,0.06)" stroke="rgba(247,241,230,0.5)" stroke-width="2"></path><path d="M16 146V54a32 32 0 0 1 64 0V146Z" fill="url(#rl)"></path><path d="M16 104H80M48 22V146" stroke="rgba(247,241,230,0.4)" stroke-width="2"></path><path d="M2 150H94V158H2Z" fill="rgba(247,241,230,0.3)"></path><path d="M10 158H24L17 172Z M41 158H55L48 172Z M72 158H86L79 172Z" fill="rgba(247,241,230,0.22)"></path></svg>
+        <div class="hero-text">
+            <p class="eyebrow">لوحة الحملة</p>
+            <h1>اكتب يوم<br>حجّاجك</h1>
+            <p>مرة وحدة. وكل تعديل يوصلهم في لحظته.</p>
+        </div>
     </header>
     <main>
         <section id="auth-box">
@@ -60,11 +66,6 @@
                 <p>رمز حملتك: <span id="campaign-code" dir="ltr">……</span></p>
                 <button type="button" id="logout-btn">خروج</button>
             </div>
-
-            <section class="campaign-hero">
-                <h1>اكتب يوم حجّاجك</h1>
-                <p>مرة وحدة. وكل تعديل يوصلهم في لحظته.</p>
-            </section>
 
             <form id="campaign-form">
                 <label for="campaign-name">اسم الحملة</label>
