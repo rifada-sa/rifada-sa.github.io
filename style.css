@@ -281,6 +281,7 @@ body.night {
     color: var(--ihram);
     font-family: "Reem Kufi", sans-serif;
     font-size: 19px;
+    font-weight: 700;
     cursor: pointer;
 }
 /* ===== حساب الحملة ===== */
@@ -304,6 +305,7 @@ body.night {
     color: var(--date);
     font-family: "Reem Kufi", sans-serif;
     font-size: 17px;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -349,6 +351,7 @@ body.night {
     color: var(--ihram);
     font-family: "Reem Kufi", sans-serif;
     font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
 }
 
