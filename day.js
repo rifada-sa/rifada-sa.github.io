@@ -88,7 +88,6 @@ function savedCampaign() {
 
 // manifest لهالحملة: نفس manifest.json، بس start_url رابط الصفحة، عشان أيقونة الشاشة
 // الرئيسية تفتح برنامج الحملة مباشرة. نحطه كـ blob، وهو ما له مسار، فروابط الأيقونات كاملة.
-// لو صار أي خطأ نخلي manifest.json الأصلي
 async function useCampaignManifest() {
     if (manifestReady) return;
     manifestReady = true;
@@ -101,9 +100,17 @@ async function useCampaignManifest() {
             icon.src = new URL(icon.src, location.href).href;
         });
         const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
-        document.querySelector('link[rel="manifest"]').href = URL.createObjectURL(blob);
+
+        // day.html بدون manifest ثابت، فننشئ الرابط هنا لو مو موجود
+        let link = document.querySelector('link[rel="manifest"]');
+        if (!link) {
+            link = document.createElement("link");
+            link.rel = "manifest";
+            document.head.appendChild(link);
+        }
+        link.href = URL.createObjectURL(blob);
     } catch (error) {
-        // نكمل بالأصلي
+        // نكمل بدون manifest
     }
 }
 
