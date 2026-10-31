@@ -882,6 +882,65 @@ input[type="tel"] {
     color: var(--rawasheen);
 }
 
+/* زر الخط الكبير جنب زر الليل */
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#big-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1.5px solid var(--on-hero);
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--on-hero);
+    font-family: "Tajawal", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* مفعّل */
+#big-btn[aria-pressed="true"] {
+    background-color: var(--on-hero);
+    color: var(--hero-bg);
+}
+
+/* خط كبير: zoom يكبّر كل اللي داخل <main> ١٫٢٥ مرة مع الأزرار والحبّات،
+   والمحتوى ينلف داخل العرض المتاح. الهيرو والقوس برّا <main> فما يتأثرون */
+body.big main {
+    zoom: 1.25;
+}
+
+/* نصوص الهيرو تكبر لحالها. line-height ثابت على القيمة القديمة (الحجم القديم × 1.8)
+   عشان النص يكبر داخل سطره، وارتفاع الهيرو ما يتغير */
+body.big .day-hero .eyebrow {
+    font-size: 17px;
+    line-height: 25.2px;
+}
+
+body.big .arc-ends {
+    font-size: 15px;
+    line-height: 21.6px;
+}
+
+/* عرضه أقل من فتحة القوس عشان ما يلمس الخط، فينلف لسطرين، والساعة تنزل شوي تعطيه مكان */
+body.big #now-next {
+    max-width: 74%;
+    margin: 0 auto;
+    font-size: 19px;
+    line-height: 1.3;
+    text-wrap: balance;
+}
+
+body.big .arc-now {
+    bottom: 0;
+}
+
 /* شارة بدون نت تحت الهيرو */
 #offline-badge {
     width: fit-content;
@@ -901,6 +960,7 @@ input[type="tel"] {
 /* بطاقة "مخيمي" (شكلها من section) */
 .camp-line {
     margin: 0;
+    overflow-wrap: anywhere; /* كلمة طويلة بدون مسافات ما تطلع برا البطاقة */
 }
 
 .camp-line strong {

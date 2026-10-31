@@ -13,6 +13,20 @@ if ("serviceWorker" in navigator) {
     });
 }
 
+// الخط الكبير: نطبّقه هنا، قبل ما تشتغل الـ modules، عشان الصفحة ما تومض (صفحة الحاج بس)
+const bigBtn = document.getElementById("big-btn");
+
+if (bigBtn) {
+    try {
+        if (localStorage.getItem("rifada-big") === "1") {
+            document.body.classList.add("big");
+            bigBtn.setAttribute("aria-pressed", "true");
+        }
+    } catch (error) {
+        // التخزين ممنوع: نبدأ بالخط العادي
+    }
+}
+
 const btn = document.getElementById("theme-btn");
 
 // lost.html بدون زر ليل، فكل هالجزء يشتغل بس لو الزر موجود

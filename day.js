@@ -58,6 +58,17 @@ if (campaignId) {
     }, MINUTE_MS - (Date.now() % MINUTE_MS));
 }
 
+// زر الخط الكبير لكبار السن. قراءة الاختيار عند الفتح في script.js، والتكبير في style.css
+document.getElementById("big-btn").addEventListener("click", function () {
+    const on = document.body.classList.toggle("big");
+    this.setAttribute("aria-pressed", on);
+    try {
+        localStorage.setItem("rifada-big", on ? "1" : "0");
+    } catch (error) {
+        // نكمل بدون حفظ
+    }
+});
+
 // رقم الحملة في الجوال (التخزين ممكن يكون ممنوع، مثلاً في التصفح الخفي)
 function rememberCampaign(id) {
     try {
