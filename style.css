@@ -620,6 +620,27 @@ input[type="tel"] {
     opacity: 0.75;
 }
 
+/* رابط الخصوصية في الفوتر وتحت زر إنشاء الحساب */
+footer a,
+.field-hint a {
+    color: var(--rawasheen);
+}
+
+/* صفحة الخصوصية: عناوين وفقرات */
+.privacy h2 {
+    margin: 24px 0 4px;
+    font-size: 22px;
+}
+
+.privacy p {
+    margin: 0 0 12px;
+}
+
+.privacy a {
+    color: var(--rawasheen);
+    overflow-wrap: anywhere;
+}
+
 /* صفحة الحاج الضايع: خط كبير وأزرار كبيرة، لواحد مستعجل ويمكن ما يعرف الموقع */
 .lost {
     margin-top: 8px;

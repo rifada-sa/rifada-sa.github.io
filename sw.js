@@ -8,7 +8,7 @@ const FIREBASE = "https://www.gstatic.com/firebasejs/12.19.0/";
 // ملفات موقعنا
 const SITE_FILES = [
     "./",
-    "index.html", "campaign.html", "day.html", "print.html", "lost.html",
+    "index.html", "campaign.html", "day.html", "print.html", "lost.html", "privacy.html",
     "style.css",
     "script.js", "firebase.js", "days.js", "qr.js", "camp.js", "home.js", "campaign.js", "day.js", "print.js", "lost.js",
     "vendor/qrcode.js",
