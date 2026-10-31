@@ -307,7 +307,10 @@ async function migrateOldDay(uid, data) {
     DAYS.forEach(function (day) { newDays[day.num] = { events: [] }; });
     newDays[num] = { events: data.events };
 
-    const result = { name: data.name, code: data.code, days: newDays };
+    // نضيف الحقل بس لو موجود: Firestore يرفض الكتابة كلها لو فيها undefined
+    const result = { days: newDays };
+    if (data.name) result.name = data.name;
+    if (data.code) result.code = data.code;
     if (num === "8" && data.date) result.startDate = data.date;
 
     try {
