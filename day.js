@@ -2,11 +2,11 @@
 import { db } from "./firebase.js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { DAYS, getDay, parseLocalDate, dateOfDay, formatDate } from "./days.js";
+import { PHONE_PATTERN, campLine, callButton } from "./camp.js";
 
 const DAY_MS = 24 * 60 * 60 * 1000; // يوم كامل بالملّي ثانية
 const MINUTE_MS = 60 * 1000;
 const SVG_NS = "http://www.w3.org/2000/svg"; // عناصر SVG تحتاج هذا "العنوان" عشان تنرسم
-const PHONE_PATTERN = /^\+?\d{7,15}$/; // نفس شرط لوحة الحملة
 
 // ١) نقرأ رقم الحملة من الرابط: day.html?c=xxxx
 // ولو ما فيه ?c= نستخدم آخر حملة محفوظة في الجوال
@@ -480,31 +480,6 @@ function campCard() {
 function addCampCard() {
     const card = campCard();
     if (card) daysEl.appendChild(card);
-}
-
-// سطر مخيم: "منى: ١٢٣" أو "منى: مربع ٥"
-function campLine(place, number) {
-    const line = document.createElement("p");
-    line.className = "camp-line";
-    const name = document.createElement("span");
-    name.textContent = place + ": ";
-    const value = document.createElement("strong");
-    value.textContent = number;
-    line.append(name, value);
-    return line;
-}
-
-// زر اتصال: النص، وتحته الرقم صغير
-function callButton(text, phone, className) {
-    const a = document.createElement("a");
-    a.className = className;
-    a.href = "tel:" + phone;
-    a.textContent = text;
-    const small = document.createElement("small");
-    small.dir = "ltr"; // عشان + تبقى قبل الرقم
-    small.textContent = phone;
-    a.appendChild(small);
-    return a;
 }
 
 // بطاقة يوم واحد بسيطة: العنوان، التاريخ، والحبّات (لـ "بكرة" وقبل الحج)

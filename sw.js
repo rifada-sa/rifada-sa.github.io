@@ -8,9 +8,9 @@ const FIREBASE = "https://www.gstatic.com/firebasejs/12.19.0/";
 // ملفات موقعنا
 const SITE_FILES = [
     "./",
-    "index.html", "campaign.html", "day.html", "print.html",
+    "index.html", "campaign.html", "day.html", "print.html", "lost.html",
     "style.css",
-    "script.js", "firebase.js", "days.js", "qr.js", "home.js", "campaign.js", "day.js", "print.js",
+    "script.js", "firebase.js", "days.js", "qr.js", "camp.js", "home.js", "campaign.js", "day.js", "print.js", "lost.js",
     "vendor/qrcode.js",
     "manifest.json",
     "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"
