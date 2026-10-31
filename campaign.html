@@ -67,6 +67,30 @@
                 <button type="button" id="logout-btn">خروج</button>
             </div>
 
+            <section id="alert-box">
+                <h2>تنبيه عاجل</h2>
+                <p class="field-hint">يطلع لكل حجّاجك فوق برنامجهم بالأحمر.</p>
+                <form id="alert-form">
+                    <label for="alert-text">نص التنبيه</label>
+                    <textarea id="alert-text" maxlength="160" rows="4" placeholder="مثلاً: الباص تأخر ٣٠ دقيقة"></textarea>
+                    <p class="field-error" id="alert-error" role="alert"></p>
+
+                    <label for="alert-duration">يبقى ظاهر</label>
+                    <select id="alert-duration">
+                        <option value="30">٣٠ دقيقة</option>
+                        <option value="60" selected>ساعة</option>
+                        <option value="180">٣ ساعات</option>
+                        <option value="midnight">لين نهاية اليوم</option>
+                    </select>
+
+                    <div class="alert-actions">
+                        <button type="submit" id="alert-send">أرسل التنبيه</button>
+                        <button type="button" id="alert-clear">امسح التنبيه</button>
+                    </div>
+                    <p id="alert-status" role="status">ما فيه تنبيه</p>
+                </form>
+            </section>
+
             <form id="campaign-form">
                 <label for="campaign-name">اسم الحملة</label>
                 <input type="text" id="campaign-name" placeholder="مثلاً: حملة النور" required>

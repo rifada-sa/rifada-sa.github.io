@@ -12,6 +12,7 @@
     --on-hero: #F7F1E6;   /* النص والرسومات فوق الهيرو */
     --wood: #3B2418;      /* خشب الباب: خلفية، تبقى غامقة في الليل */
     --on-wood: #F7F1E6;   /* النص والرسومات فوق الخشب */
+    --alert-text: #9E2B25; /* نص الأخطاء: يفتح في الليل عشان يبان (الخلفيات الحمراء --alert) */
 }
 
 /* أي عنصر فيه hidden يختفي، حتى لو له display في مكان ثاني */
@@ -119,6 +120,7 @@ body.night {
     --on-hero: #F3EBDD;
     --wood: #3A2A20;
     --on-wood: #F3EBDD;
+    --alert-text: #F08A78;
 }
 
 /* زر الوضع الليلي */
@@ -153,7 +155,9 @@ body.night {
     margin-top: 8px;
 }
 
-#campaign-form input {
+#campaign-form input,
+#alert-form select,
+#alert-form textarea {
     font: inherit;
     height: 48px;
     padding: 0 14px;
@@ -164,9 +168,68 @@ body.night {
     box-sizing: border-box;
 }
 
-#campaign-form input:focus {
+#campaign-form input:focus,
+#alert-form select:focus,
+#alert-form textarea:focus {
     outline: 2px solid var(--rawasheen);
     outline-offset: 1px;
+}
+
+/* بطاقة التنبيه العاجل في لوحة الحملة */
+#alert-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#alert-form label {
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+/* النص يكبر حسب rows، مو ارتفاع الحقول الثابت */
+#alert-form textarea {
+    height: auto;
+    padding: 10px 14px;
+    resize: vertical;
+}
+
+.alert-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.alert-actions button {
+    flex: 1;
+    min-height: 48px;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.alert-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#alert-send {
+    border: none;
+    background-color: var(--alert);
+    color: #FFFFFF;
+}
+
+#alert-clear {
+    border: 1.5px solid var(--rawasheen);
+    background: none;
+    color: var(--rawasheen);
+}
+
+#alert-status {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 /* أرقام الحملة */
@@ -177,7 +240,7 @@ body.night {
 }
 
 .field-error {
-    color: var(--alert);
+    color: var(--alert-text);
     font-size: 14px;
     margin: 0;
 }
@@ -416,8 +479,12 @@ input[type="tel"] {
 
 /* رسائل النماذج: حمراء للخطأ، خضراء للنجاح */
 .form-msg {
-    color: var(--alert);
+    color: var(--alert-text);
     margin: 0;
+}
+
+#publish-msg.failed {
+    color: var(--alert-text);
 }
 
 .form-msg.ok,
@@ -528,6 +595,24 @@ input[type="tel"] {
 .empty-day {
     margin: 0;
     opacity: 0.75;
+}
+
+/* شريط التنبيه العاجل: أول شي في الصفحة */
+#alert-banner {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background-color: var(--alert);
+    color: #FFFFFF;
+    font-family: "Tajawal", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+    overflow-wrap: anywhere; /* كلمة طويلة بدون مسافات ما تطلع برا الشريط */
+}
+
+#alert-banner p {
+    margin: 0;
 }
 
 /* بطاقة "مخيمي" (شكلها من section) */
@@ -1093,7 +1178,7 @@ input[type="tel"] {
 }
 
 #code-msg {
-    color: var(--alert);
+    color: var(--alert-text);
     margin: 6px 0 0;
 }
 

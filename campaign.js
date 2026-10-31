@@ -16,6 +16,12 @@ const loginForm = document.getElementById("login-form");
 const loginMsg = document.getElementById("login-msg");
 const dashboard = document.getElementById("dashboard");
 const codeEl = document.getElementById("campaign-code");
+const alertForm = document.getElementById("alert-form");
+const alertText = document.getElementById("alert-text");
+const alertError = document.getElementById("alert-error");
+const alertDuration = document.getElementById("alert-duration");
+const alertStatus = document.getElementById("alert-status");
+const alertButtons = document.querySelectorAll(".alert-actions button");
 const form = document.getElementById("campaign-form");
 const startInput = document.getElementById("start-date");
 const supervisorInput = document.getElementById("supervisor-phone");
@@ -52,6 +58,7 @@ showTab(location.hash === "#login" ? "login" : "signup");
 function showMsg(el, text, ok = false) {
     el.textContent = text;
     el.classList.toggle("ok", ok);
+    el.classList.remove("failed");
 }
 
 // أخطاء Firebase بالعربي
@@ -166,6 +173,10 @@ onAuthStateChanged(auth, async function (user) {
         supervisorError.textContent = ""; // form.reset() ما يمسح رسائل الخطأ
         emergencyError.textContent = "";
         codeEl.textContent = "";
+        alertForm.reset();
+        alertError.textContent = "";
+        alertUntil = 0;
+        showAlertStatus();
         return;
     }
     authBox.hidden = true;
@@ -191,6 +202,11 @@ onAuthStateChanged(auth, async function (user) {
         minaInput.value = data.info.minaCamp || "";
         arafatInput.value = data.info.arafatCamp || "";
     }
+    if (data.alert && Date.now() < data.alert.until) { // التنبيه المنتهي نتجاهله
+        alertText.value = data.alert.text;
+        alertUntil = data.alert.until;
+    }
+    showAlertStatus();
 
     // ننقل حبّات كل يوم من Firestore للمتغير days
     days = emptyDays();
@@ -405,6 +421,7 @@ form.addEventListener("submit", async function (e) {
         showLink(auth.currentUser.uid, true);
     } catch (error) {
         showMsg(publishMsg, "ما قدرنا ننشر، جرّب مرة ثانية");
+        publishMsg.classList.add("failed"); // نفس سطر "جاري النشر…"، فنلوّنه أحمر وقت الخطأ بس
     }
 });
 
@@ -441,3 +458,83 @@ function checkPhone(phone, errorEl) {
     errorEl.textContent = ok ? "" : "الرقم غلط، اكتبه أرقام بس مثل 0501234567";
     return ok;
 }
+
+// ١٥) التنبيه العاجل: سطر يطلع عند الحجاج بالأحمر ويختفي لحاله وقت until
+let alertUntil = 0; // متى ينتهي التنبيه الظاهر، بالملّي ثانية (0 = ما فيه)
+
+// نهاية التنبيه: "midnight" = منتصف الليل الجاي بتوقيت الجوال، وغيرها عدد دقائق
+function alertEnd(value) {
+    if (value === "midnight") {
+        const end = new Date();
+        end.setHours(24, 0, 0, 0); // الساعة ٢٤ = بداية بكرة
+        return end.getTime();
+    }
+    return Date.now() + Number(value) * 60 * 1000;
+}
+
+// سطر الحالة: "التنبيه ظاهر لين ٤:٣٠ م" أو "ما فيه تنبيه"
+function showAlertStatus() {
+    if (Date.now() < alertUntil) {
+        const time = new Date(alertUntil).toLocaleTimeString("ar-SA", { hour: "numeric", minute: "2-digit" });
+        alertStatus.textContent = "التنبيه ظاهر لين " + time;
+    } else {
+        alertStatus.textContent = "ما فيه تنبيه";
+    }
+}
+
+// لو اللوحة مفتوحة وانتهى الوقت، يتغير السطر لحاله
+setInterval(showAlertStatus, 60 * 1000);
+
+// أول ما ينضغط الزر: نعطّل الزرين ونكتب وش قاعد يصير.
+// بدون نت Firestore يحفظ الطلب وينتظر، فالزرين يبقون معطّلين لين يرجع النت
+function startAlertWork(working, offline) {
+    alertButtons.forEach(function (btn) { btn.disabled = true; });
+    alertStatus.textContent = navigator.onLine ? working : offline;
+}
+
+// بعد ما ينجح أو يفشل: نرجّع الزرين ونحدّث السطر
+function endAlertWork() {
+    alertButtons.forEach(function (btn) { btn.disabled = false; });
+    showAlertStatus();
+}
+
+// الإرسال: نكتب alert بس، والبرنامج ما ينلمس (merge)
+alertForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const text = alertText.value.trim();
+    if (!text) {
+        alertError.textContent = "اكتب نص التنبيه أول";
+        alertText.focus();
+        return;
+    }
+    alertError.textContent = "";
+    const until = alertEnd(alertDuration.value);
+    startAlertWork("جاري الإرسال…", "ما فيه نت. التنبيه بيوصل لحجّاجك أول ما يرجع النت");
+    try {
+        await setDoc(doc(db, "campaigns", auth.currentUser.uid), {
+            alert: { text: text, until: until }
+        }, { merge: true });
+        alertUntil = until;
+    } catch (error) {
+        alertError.textContent = "ما قدرنا نرسل التنبيه، جرّب مرة ثانية";
+    } finally {
+        endAlertWork(); // finally تشتغل في الحالتين: نجح أو فشل
+    }
+});
+
+// المسح: نحذف alert من المستند
+document.getElementById("alert-clear").addEventListener("click", async function () {
+    alertError.textContent = "";
+    startAlertWork("جاري المسح…", "ما فيه نت. المسح بيوصل لحجّاجك أول ما يرجع النت");
+    try {
+        await setDoc(doc(db, "campaigns", auth.currentUser.uid), {
+            alert: deleteField()
+        }, { merge: true });
+        alertText.value = "";
+        alertUntil = 0;
+    } catch (error) {
+        alertError.textContent = "ما قدرنا نمسح التنبيه، جرّب مرة ثانية";
+    } finally {
+        endAlertWork();
+    }
+});

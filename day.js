@@ -20,6 +20,7 @@ const todayHero = document.getElementById("today-hero");
 
 // آخر بيانات وصلت: undefined = لسا ما وصل شي، null = ما لقينا الحملة
 let campaign;
+let shownAlert = ""; // نص التنبيه المعروض الحين
 
 // لو فيه رقم حملة: نخفي المثال ونوري البرنامج الحقيقي
 if (campaignId) {
@@ -55,6 +56,7 @@ function getNow() {
 // ٣) نرسم الصفحة حسب تاريخ اليوم
 function render() {
     if (campaign === undefined) return; // لسا ننتظر Firestore
+    renderAlert();
     todayHero.hidden = true; // الهيرو الكامل لأيام الحج بس، renderToday تظهره
     nameEl.hidden = false;
     if (campaign === null) {
@@ -103,6 +105,30 @@ function render() {
     } else {
         showMessage("تقبّل الله حجّك 🤍");
     }
+}
+
+// التنبيه العاجل: شريط أحمر أول <main>. الرسم كل دقيقة يعيد الفحص، فيختفي لحاله وقت until
+function renderAlert() {
+    const notice = campaign && campaign.alert;
+    const text = notice && notice.text && Date.now() < notice.until ? notice.text : "";
+
+    // ما تغيّر شي: نخلي الشريط، عشان قارئ الشاشة ما يعيد التنبيه كل دقيقة
+    if (text === shownAlert) return;
+    shownAlert = text;
+
+    const old = document.getElementById("alert-banner");
+    if (old) old.remove();
+    if (!text) return;
+
+    const banner = document.createElement("div");
+    banner.id = "alert-banner";
+    banner.setAttribute("role", "alert");
+    const title = document.createElement("p");
+    title.textContent = "⚠️ تنبيه من حملتك";
+    const message = document.createElement("p");
+    message.textContent = text;
+    banner.append(title, message);
+    document.querySelector("main").prepend(banner);
 }
 
 // ٤) يوم من أيام الحج: الهيرو والقوس، رحلتك، المسبحة، وبكرة
