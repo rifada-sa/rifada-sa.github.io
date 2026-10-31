@@ -544,6 +544,54 @@ input[type="tel"] {
     opacity: 0.75;
 }
 
+/* بطاقة "مخيمي" (شكلها من section) */
+.camp-line {
+    margin: 0;
+}
+
+.camp-line strong {
+    color: var(--rawasheen);
+    font-size: 22px;
+}
+
+/* زر واحد ياخذ العرض كامل، وزرين جنب بعض لو فيه مساحة */
+.call-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.call-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 56px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background-color: var(--rawasheen);
+    color: var(--ihram);
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    text-decoration: none;
+}
+
+.call-btn small {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* الأحمر للتنبيه والطوارئ بس */
+.call-btn.emergency {
+    background-color: var(--alert);
+    color: #FFFFFF;
+}
+
 .hero.page-hero {
     padding-bottom: 40px;
     margin-bottom: 24px;

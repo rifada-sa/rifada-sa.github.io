@@ -6,6 +6,7 @@ import { DAYS, getDay, parseLocalDate, dateOfDay, formatDate } from "./days.js";
 const DAY_MS = 24 * 60 * 60 * 1000; // يوم كامل بالملّي ثانية
 const MINUTE_MS = 60 * 1000;
 const SVG_NS = "http://www.w3.org/2000/svg"; // عناصر SVG تحتاج هذا "العنوان" عشان تنرسم
+const PHONE_PATTERN = /^\+?\d{7,15}$/; // نفس شرط لوحة الحملة
 
 // ١) نقرأ رقم الحملة من الرابط: day.html?c=xxxx
 const params = new URLSearchParams(location.search);
@@ -70,8 +71,10 @@ function render() {
         const withEvents = DAYS.filter(function (day) { return eventsOf(day.num).length > 0; });
         if (withEvents.length === 0) {
             showMessage("الحملة لسا ما نشرت برنامجها");
+            addCampCard(); // بعد showMessage، لأنها تمسح daysEl
             return;
         }
+        addCampCard();
         withEvents.forEach(function (day) {
             daysEl.appendChild(dayCard("", day.num));
         });
@@ -93,6 +96,7 @@ function render() {
         countdown.className = "countdown";
         countdown.textContent = countdownText(8 - num);
         card.prepend(countdown);
+        addCampCard();
         daysEl.appendChild(card);
     } else if (num <= 13) {
         renderToday(String(num), now);
@@ -138,6 +142,7 @@ function renderToday(num, now) {
 
     // تحت الهيرو
     daysEl.appendChild(journey(num));
+    addCampCard();
     daysEl.appendChild(masbaha(events, current, next, minutes));
     if (num !== "13") daysEl.appendChild(dayCard("بكرة: ", String(Number(num) + 1)));
 }
@@ -342,6 +347,68 @@ function masbaha(events, current, next, minutes) {
     });
     box.appendChild(list);
     return box;
+}
+
+// ٨) بطاقة "مخيمي": المخيمات وأزرار الاتصال
+// ترجع null لو ما فيه شي نعرضه (ما فيه info، أو كل حقولها فاضية)
+function campCard() {
+    const info = campaign.info;
+    if (!info) return null;
+
+    // الرابط tel: يجي من البيانات، فما نسوي الزر إلا لرقم صحيح
+    const supervisorOk = PHONE_PATTERN.test(info.supervisorPhone);
+    const emergencyOk = PHONE_PATTERN.test(info.emergencyPhone);
+    if (!info.minaCamp && !info.arafatCamp && !supervisorOk && !emergencyOk) return null;
+
+    const section = document.createElement("section");
+    section.className = "camp-card";
+
+    const h2 = document.createElement("h2");
+    h2.textContent = "مخيمي";
+    section.appendChild(h2);
+
+    if (info.minaCamp) section.appendChild(campLine("منى", info.minaCamp));
+    if (info.arafatCamp) section.appendChild(campLine("عرفات", info.arafatCamp));
+
+    if (supervisorOk || emergencyOk) {
+        const row = document.createElement("div");
+        row.className = "call-row";
+        if (supervisorOk) row.appendChild(callButton("📞 المشرف", info.supervisorPhone, "call-btn"));
+        if (emergencyOk) row.appendChild(callButton("🚨 الطوارئ", info.emergencyPhone, "call-btn emergency"));
+        section.appendChild(row);
+    }
+    return section;
+}
+
+// نضيف بطاقة "مخيمي" لو فيه شي نعرضه
+function addCampCard() {
+    const card = campCard();
+    if (card) daysEl.appendChild(card);
+}
+
+// سطر مخيم: "منى: ١٢٣" أو "منى: مربع ٥"
+function campLine(place, number) {
+    const line = document.createElement("p");
+    line.className = "camp-line";
+    const name = document.createElement("span");
+    name.textContent = place + ": ";
+    const value = document.createElement("strong");
+    value.textContent = number;
+    line.append(name, value);
+    return line;
+}
+
+// زر اتصال: النص، وتحته الرقم صغير
+function callButton(text, phone, className) {
+    const a = document.createElement("a");
+    a.className = className;
+    a.href = "tel:" + phone;
+    a.textContent = text;
+    const small = document.createElement("small");
+    small.dir = "ltr"; // عشان + تبقى قبل الرقم
+    small.textContent = phone;
+    a.appendChild(small);
+    return a;
 }
 
 // بطاقة يوم واحد بسيطة: العنوان، التاريخ، والحبّات (لـ "بكرة" وقبل الحج)
