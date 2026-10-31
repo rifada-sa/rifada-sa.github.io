@@ -299,6 +299,18 @@ input[type="tel"] {
     color: var(--rawasheen);
 }
 
+/* الشاشات الضيقة: نخفي أيقونة الساعة عشان يبان الوقت كامل مع ص/م (الكتابة تبقى شغالة) */
+@media (max-width: 400px) {
+    /* #campaign-form هنا عشان يغلب padding حق "#campaign-form input" */
+    #campaign-form .event input[type="time"] {
+        padding: 0 6px;
+    }
+
+    .event input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+}
+
 .event .start-time {
     grid-area: start;
 }
