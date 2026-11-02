@@ -1710,3 +1710,12 @@ body.big .next-label {
     font-size: 15px;
     opacity: 0.85;
 }
+/* رابط "جرّب اللوحة" تحت أزرار الحملة */
+.try-link {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    color: var(--on-wood);
+    font-weight: 700;
+    text-underline-offset: 4px;
+}
