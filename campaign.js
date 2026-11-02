@@ -41,7 +41,8 @@ const addEventBtn = document.getElementById("add-event");
 const eventLimit = document.getElementById("event-limit");
 const template = document.getElementById("event-template");
 const publishMsg = document.getElementById("publish-msg");
-
+// وضع التجربة: لو الرابط فيه ?demo=1 نفتح اللوحة بدون حساب، وما ينحفظ شي
+const isDemo = new URLSearchParams(location.search).get("demo") === "1";
 auth.languageCode = "ar"; // إيميل استعادة كلمة السر يوصل بالعربي
 
 // ١) التبويبات: "حساب جديد" و"تسجيل دخول"
@@ -139,6 +140,10 @@ document.getElementById("forgot-btn").addEventListener("click", async function (
 
 // ٥) خروج
 document.getElementById("logout-btn").addEventListener("click", function () {
+    if (isDemo) {
+        location.href = "index.html"; // التجربة: نرجع للرئيسية بس
+        return;
+    }
     signOut(auth);
 });
 
@@ -170,6 +175,7 @@ async function ensureCode(uid, data) {
 
 // ٧) كل ما تغيّر حال الدخول: نوري اللوحة أو صندوق الدخول
 onAuthStateChanged(auth, async function (user) {
+    if (isDemo) return;
     if (!user) {
         authBox.hidden = false;
         dashboard.hidden = true;
@@ -195,7 +201,7 @@ onAuthStateChanged(auth, async function (user) {
     showMsg(loginMsg, "");
 
     // لو الحساب توه انشأ: ننتظر لين ينحفظ الاسم
-    if (signupSave) await signupSave.catch(function () {});
+    if (signupSave) await signupSave.catch(function () { });
 
     // نجيب البرنامج المحفوظ (لو فيه)
     const saved = await getDoc(doc(db, "campaigns", user.uid));
@@ -386,7 +392,10 @@ eventsList.addEventListener("click", function (e) {
 // ١٢) النشر: كل الأيام مرة وحدة
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
-
+    if (isDemo) {
+        showMsg(publishMsg, "✓ هنا كان بيوصل البرنامج لحجّاجك. سجّل حساب عشان يصير حقيقي", true);
+        return;
+    }
     // نتأكد من أرقام الجوال أول، ولو فيه غلط نوقف النشر (والرابط يبقى مكانه)
     const supervisorPhone = normalizePhone(supervisorInput.value);
     const emergencyPhone = normalizePhone(emergencyInput.value);
@@ -567,6 +576,10 @@ function endAlertWork() {
 // الإرسال: نكتب alert بس، والبرنامج ما ينلمس (merge)
 alertForm.addEventListener("submit", async function (e) {
     e.preventDefault();
+    if (isDemo) {
+        alertStatus.textContent = "في الحساب الحقيقي، هالتنبيه يطلع عند حجّاجك بالأحمر";
+        return;
+    }
     const text = alertText.value.trim();
     if (!text) {
         alertError.textContent = "اكتب نص التنبيه أول";
@@ -587,9 +600,13 @@ alertForm.addEventListener("submit", async function (e) {
         endAlertWork(); // finally تشتغل في الحالتين: نجح أو فشل
     }
 });
-
+  
 // المسح: نحذف alert من المستند
 document.getElementById("alert-clear").addEventListener("click", async function () {
+        if (isDemo) {
+        alertText.value = "";
+        return;
+    }
     alertError.textContent = "";
     startAlertWork("جاري المسح…", "ما فيه نت. المسح محفوظ، وبينرسل أول ما يرجع النت وتكون هالصفحة مفتوحة");
     try {
@@ -604,3 +621,33 @@ document.getElementById("alert-clear").addEventListener("click", async function 
         endAlertWork();
     }
 });
+
+// ١٧) وضع التجربة: نفتح اللوحة مع ملاحظة فوقها
+function startDemo() {
+    authBox.hidden = true;
+    dashboard.hidden = false;
+    codeEl.textContent = "تجربة";
+    previewLink.href = "day.html"; // صفحة الحاج المثال
+    previewLink.hidden = false;
+    document.getElementById("campaign-name").value = "حملة تجربة";
+
+    const note = document.createElement("p");
+    note.className = "demo-note";
+    note.innerHTML = 'هذي لوحة تجربة وما ينحفظ فيها شي. <a href="campaign.html#signup">سجّل حساب</a> عشان يوصل برنامجك لحجّاجك.';
+    dashboard.prepend(note);
+
+    // برنامج مثال: يومين عشان تشوف الحملة كيف تتنقل بين الأيام
+    days["8"] = [
+        { time: "06:00", title: "الإحرام من السكن والتلبية", end: "" },
+        { time: "08:00", title: "التحرك بالحافلات إلى منى", end: "" },
+        { time: "12:30", title: "صلاة الظهر قصرًا في المخيم", end: "" }
+    ];
+    days["9"] = [
+        { time: "06:00", title: "التحرك إلى عرفات", end: "" },
+        { time: "12:15", title: "صلاة الظهر والعصر جمعًا وقصرًا", end: "" },
+        { time: "18:45", title: "النفرة إلى مزدلفة", end: "" }
+    ];
+
+    showDay("8");
+}
+if (isDemo) startDemo();

@@ -1702,3 +1702,11 @@ body.big .next-label {
         padding-left: 0;
     }
 }
+.try-link{
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    color: inherit;
+    font-size: 15px;
+    opacity: 0.85;
+}
