@@ -1,7 +1,7 @@
 // ⚠️ كل push غيّر رقم CACHE (rifada-v1 ← rifada-v2 ...)، وإلا الحجاج يشوفون ملفات قديمة
 
 // Service Worker: يحفظ ملفات الموقع في الجوال عشان تفتح بدون نت
-const CACHE = "rifada-v3";
+const CACHE = "rifada-v4";
 
 const FIREBASE = "https://www.gstatic.com/firebasejs/12.19.0/";
 
