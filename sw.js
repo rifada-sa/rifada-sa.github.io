@@ -1,7 +1,7 @@
 // ⚠️ كل push غيّر رقم CACHE (rifada-v1 ← rifada-v2 ...)، وإلا الحجاج يشوفون ملفات قديمة
 
 // Service Worker: يحفظ ملفات الموقع في الجوال عشان تفتح بدون نت
-const CACHE = "rifada-v4";
+const CACHE = "rifada-v5";
 
 const FIREBASE = "https://www.gstatic.com/firebasejs/12.19.0/";
 
@@ -30,7 +30,11 @@ const FIREBASE_FILES = [
 self.addEventListener("install", function (event) {
     event.waitUntil(
         caches.open(CACHE).then(function (cache) {
-            return cache.addAll(SITE_FILES.concat(FIREBASE_FILES));
+            // cache: "reload" يقول للمتصفح: جيب الملف من GitHub نفسه، مو من نسختك المحفوظة
+            const fresh = SITE_FILES.map(function (file) {
+                return new Request(file, { cache: "reload" });
+            });
+            return cache.addAll(fresh.concat(FIREBASE_FILES));
         }).then(function () {
             return self.skipWaiting();
         })
@@ -83,10 +87,10 @@ async function networkFirst(event, url) {
         return response;
     });
     // نخلي الـ Service Worker صاحي لين تخلص الشبكة، حتى لو رددنا من الكاش قبلها
-    event.waitUntil(network.catch(function () {}));
+    event.waitUntil(network.catch(function () { }));
 
     const timeout = new Promise(function (resolve) { setTimeout(resolve, 2000); });
-    const first = await Promise.race([network.catch(function () {}), timeout]);
+    const first = await Promise.race([network.catch(function () { }), timeout]);
     if (first) return first;
 
     const cached = await cache.match(key);
