@@ -76,3 +76,4 @@
 **Built with:** HTML, CSS and JavaScript modules, Firebase Authentication and Cloud Firestore (Dammam) with security rules, Service Worker and PWA, GitHub Pages, and qrcode-generator (MIT).
 
 **Privacy:** pilgrims give us no personal data, and there are no ads or trackers. See the [privacy page](https://rifada-sa.github.io/privacy.html).
+© 2026 Rifada. All rights reserved. See LICENSE.
