@@ -131,10 +131,12 @@ function updateOfflineBadge() {
 }
 
 // الوقت الحين (أو وقت التجربة لو فيه &t= في الرابط)
+// والحملة كمان تقدر تحدد وقت وهمي في campaign.demoTime (للعرض)، و &t= في الرابط يغلبه
 function getNow() {
     const now = new Date();
-    if (testTime && /^\d{1,2}:\d{2}$/.test(testTime)) {
-        const [h, m] = testTime.split(":").map(Number);
+    const fakeTime = testTime || (campaign && campaign.demoTime);
+    if (fakeTime && /^\d{1,2}:\d{2}$/.test(fakeTime)) {
+        const [h, m] = String(fakeTime).split(":").map(Number);
         now.setHours(h, m, 0, 0);
     }
     return now;
@@ -155,6 +157,13 @@ function render() {
 
     nameEl.textContent = campaign.name || "";
     daysEl.innerHTML = "";
+
+    // وضع العرض: لو الحملة فيها demoDay (٨ إلى ١٣) نعرض هاليوم مهما كان التاريخ
+    const demoDay = Number(campaign.demoDay);
+    if (Number.isInteger(demoDay) && demoDay >= 8 && demoDay <= 13) {
+        renderToday(String(demoDay), getNow());
+        return;
+    }
 
     // الحملة ما كتبت تاريخ التروية: ما نعرف وش اليوم، فنعرض كل الأيام اللي فيها فعاليات
     if (!campaign.startDate) {
